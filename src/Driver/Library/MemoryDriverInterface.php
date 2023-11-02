@@ -6,12 +6,11 @@
 
 declare(strict_types=1);
 
-namespace Ruga\Skeleton;
+namespace Ruga\Dms\Driver\Library;
 
+use Ruga\Dms\Driver\LibraryDriverInterface;
 
-/**
- * Vorlage.
- */
-class Vorlage extends AbstractVorlage implements VorlageInterface, NameableVorlageInterface
+interface MemoryDriverInterface extends LibraryDriverInterface
 {
+    
 }

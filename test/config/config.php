@@ -2,6 +2,9 @@
 
 
 return [
+//    \Ruga\Dms\Dms::class => [
+//        'name' => 'Hello World',
+//    ],
     'db' => [
         'driver' => 'Pdo_Mysql',
         'host' => '127.0.0.1',
@@ -27,6 +30,12 @@ return [
                 'throw_exceptions' => false,
             ],
             'serializer' => [],
+        ],
+    ],
+    'dependencies' => [
+        'aliases' => [],
+        'factories' => [
+            \Ruga\Dms\Driver\LibraryDriverInterface::class => \Ruga\Dms\Driver\Library\MemoryDriverFactory::class
         ],
     ],
 ];

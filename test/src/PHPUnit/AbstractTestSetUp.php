@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Ruga\Skeleton\Test\PHPUnit;
+namespace Ruga\Dms\Test\PHPUnit;
 
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\ConfigAggregator\ConfigAggregator;
@@ -21,9 +21,47 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractTestSetUp extends \Ruga\Db\PHPUnit\AbstractTestSetUp
 {
+    private function rm(string $dir)
+    {
+        $dir=realpath($dir);
+        foreach (glob($dir . "/*") as $file) {
+            if (is_dir($file)) {
+                $this->rm($file);
+                rmdir($file);
+            } else {
+                unlink($file);
+            }
+        }
+    }
+    
+    
+    
     
     protected function setUp(): void
     {
+        foreach (glob(__DIR__ . "/../../tmp/*") as $file) {
+            unlink($file);
+        }
+        foreach (glob(__DIR__ . "/../../data/files/*") as $file) {
+            unlink($file);
+        }
+        foreach (glob(__DIR__ . "/../../data/libraries/*") as $file) {
+            unlink($file);
+        }
+        
+        
+//        foreach (glob(__DIR__ . "/../data/config_files/*") as $file) {
+//            unlink($file);
+//        }
+//        foreach (glob(__DIR__ . "/../data/library2/*") as $file) {
+//            unlink($file);
+//        }
+//        foreach (glob(__DIR__ . "/../data/library3/*") as $file) {
+//            unlink($file);
+//        }
+        
+//        $this->rm(__DIR__ . "/../data/library1/");
+        
         parent::setUp();
     }
     
@@ -39,6 +77,7 @@ abstract class AbstractTestSetUp extends \Ruga\Db\PHPUnit\AbstractTestSetUp
         $config = new ConfigAggregator(
             [
                 new \Ruga\Db\ConfigProvider(),
+                new \Ruga\Dms\ConfigProvider(),
                 new PhpFileProvider(__DIR__ . "/../../config/config.php"),
                 new PhpFileProvider(__DIR__ . "/../../config/config.local.php"),
             ], null, []
