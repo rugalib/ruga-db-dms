@@ -1,17 +1,19 @@
 {
-  "name": "rugalib/ruga-skeleton",
-  "description": "Template for rugalib components",
+  "name": "rugalib/ruga-db-dms",
+  "description": "Document management system library for rugalib",
   "license": "AGPL-3.0-only",
   "homepage": "https://github.com/rugalib",
   "type": "library",
   "require": {
-    "php": "^7.4|^8.0|^8.1|^8.2"
+    "php": "^7.4|^8.0|^8.1|^8.2",
+    "rugalib/ruga-std": "^1.0",
+    "rugalib/ruga-log": "^1.0",
+    "rugalib/ruga-db": "^1.4"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6",
     "laminas/laminas-config-aggregator": "^1.7",
     "laminas/laminas-servicemanager": "^3.11",
-    "rugalib/ruga-db": "^1.4"
   },
   "repositories": [
     {
@@ -27,18 +29,18 @@
   ],
   "autoload": {
     "psr-4": {
-      "Ruga\\Skeleton\\": "src/"
+      "Ruga\\Dms\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Ruga\\Skeleton\\Test\\": "test/src"
+      "Ruga\\Dms\\Test\\": "test/src"
     }
   },
   "extra": {
     "laminas": {
-      "component": "Ruga\\Skeleton",
-      "config-provider": "Ruga\\Skeleton\\ConfigProvider"
+      "component": "Ruga\\Dms",
+      "config-provider": "Ruga\\Dms\\ConfigProvider"
     }
   }
 }
