@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @var string                   $comp_name
  */
 $userTable = 'User';
-//$libraryTable = $resolver->getTableName(\Ruga\Dms\LibraryTable::class);
+//$libraryTable = $resolver->getTableName(\Ruga\Dms\Model\LibraryTable::class);
 
 $libraryTable = 'DmsLibrary';
 
