@@ -294,6 +294,7 @@ class Document extends AbstractDocument implements DocumentInterface
      * Returns true if the file content has changed.
      *
      * @param string $templatefile
+     * @param array  $data
      *
      * @return bool True if document has changed
      * @throws \Exception
