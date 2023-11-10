@@ -20,17 +20,6 @@ class MemoryStorageContainer extends AbstractStorageContainer implements DataSto
     /**
      * @inheritDoc
      */
-    public function getUuid(): string
-    {
-        $hashedUuid = Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', spl_object_hash($this)));
-        return $hashedUuid->toString();
-    }
-    
-    
-    
-    /**
-     * @inheritDoc
-     */
     public function save()
     {
         // Not applicable

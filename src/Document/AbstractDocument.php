@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ruga\Dms\Document;
 
 use Ruga\Dms\Driver\DataStorageContainerInterface;
+use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 use Ruga\Dms\Library\AbstractLibrary;
 use Ruga\Dms\Library\LibraryInterface;
@@ -18,19 +19,23 @@ abstract class AbstractDocument implements DocumentInterface
     protected LibraryInterface $library;
     protected MetaStorageContainerInterface $metaStorage;
     protected DataStorageContainerInterface $dataStorage;
+    protected LinkStorageContainerInterface $linkStorage;
     
     
     
     public function __construct(
         AbstractLibrary $library,
         MetaStorageContainerInterface $metaStorage,
-        DataStorageContainerInterface $dataStorage
+        DataStorageContainerInterface $dataStorage,
+        LinkStorageContainerInterface $linkStorage
     ) {
         $this->library = $library;
         $this->metaStorage = $metaStorage;
         $this->metaStorage->setDocument($this);
         $this->dataStorage = $dataStorage;
         $this->dataStorage->setDocument($this);
+        $this->linkStorage = $linkStorage;
+        $this->linkStorage->setDocument($this);
     }
     
     
@@ -51,6 +56,13 @@ abstract class AbstractDocument implements DocumentInterface
     public function getDataStorageContainer(): DataStorageContainerInterface
     {
         return $this->dataStorage;
+    }
+    
+    
+    
+    public function getLinkStorageContainer(): LinkStorageContainerInterface
+    {
+        return $this->linkStorage;
     }
     
     

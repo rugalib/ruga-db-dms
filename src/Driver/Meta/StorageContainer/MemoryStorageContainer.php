@@ -132,7 +132,7 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
     /**
      * @inheritDoc
      */
-    public function getMimetype()
+    public function getMimetype(): string
     {
         return $this->mimetype ?? 'application/octet-stream';
     }
@@ -196,26 +196,6 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
     public function delete()
     {
         // Not applicatble
-    }
-    
-    
-    
-    /**
-     * @inheritDoc
-     */
-    public function linkTo(RowInterface $row)
-    {
-        // TODO: Implement linkTo() method.
-    }
-    
-    
-    
-    /**
-     * @inheritDoc
-     */
-    public function unlinkFrom(RowInterface $row)
-    {
-        // TODO: Implement unlinkFrom() method.
     }
     
     

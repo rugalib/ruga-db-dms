@@ -21,7 +21,7 @@ interface DataDriverInterface
     
     
     /**
-     * Returns the data storage instance that belongs to the given meta storage.
+     * Returns the data storage container that belongs to the given meta storage.
      *
      * @param MetaStorageContainerInterface $metaStorage
      *

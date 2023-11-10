@@ -9,15 +9,20 @@ declare(strict_types=1);
 namespace Ruga\Dms\Document;
 
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 use Ruga\Dms\Driver\DataStorageContainerDocumentInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
+use Ruga\Dms\Driver\LinkStorageContainerDocumentInterface;
+use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerDocumentInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
 /**
  * Interface to a general document in the DMS.
  */
-interface DocumentInterface extends MetaStorageContainerDocumentInterface, DataStorageContainerDocumentInterface
+interface DocumentInterface extends MetaStorageContainerDocumentInterface,
+                                    DataStorageContainerDocumentInterface,
+                                    LinkStorageContainerDocumentInterface
 {
     
     
@@ -31,7 +36,7 @@ interface DocumentInterface extends MetaStorageContainerDocumentInterface, DataS
     
     
     /**
-     * Delete data and meta record.
+     * Delete link, data and meta record.
      *
      * @return void
      */
@@ -102,9 +107,11 @@ interface DocumentInterface extends MetaStorageContainerDocumentInterface, DataS
     /**
      * Returns the uri where the document can be downloaded.
      *
-     * @return \Psr\Http\Message\UriInterface
+     * @param string $basePath
+     *
+     * @return UriInterface
      */
-    public function getDownloadUri(): \Psr\Http\Message\UriInterface;
+    public function getDownloadUri(string $basePath = ''): \Psr\Http\Message\UriInterface;
     
     
     
@@ -123,5 +130,14 @@ interface DocumentInterface extends MetaStorageContainerDocumentInterface, DataS
      * @return DataStorageContainerInterface
      */
     public function getDataStorageContainer(): DataStorageContainerInterface;
+    
+    
+    
+    /**
+     * Return the link storage container associated to this document.
+     *
+     * @return LinkStorageContainerInterface
+     */
+    public function getLinkStorageContainer(): LinkStorageContainerInterface;
     
 }

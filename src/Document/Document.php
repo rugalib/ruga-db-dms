@@ -336,12 +336,11 @@ class Document extends AbstractDocument implements DocumentInterface
     
     
     /**
-     * Delete data and meta record.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function delete()
     {
+        $this->linkStorage->delete();
         $this->dataStorage->delete();
         $this->metaStorage->delete();
     }
@@ -349,39 +348,37 @@ class Document extends AbstractDocument implements DocumentInterface
     
     
     /**
-     * Link document to the given entity.
-     *
-     * @param RowInterface $row
-     *
-     * @return RowInterface
+     * @inheritdoc
      */
-    public function linkTo(RowInterface $row): RowInterface
+    public function linkTo($key)
     {
-        return $this->metaStorage->linkTo($row);
+        return $this->linkStorage->linkTo($key);
     }
     
     
     
     /**
-     * Unlink document from the given entity.
-     *
-     * @param RowInterface $row
-     *
-     * @return mixed
+     * @inheritdoc
      */
-    public function unlinkFrom(RowInterface $row)
+    public function unlinkFrom($key)
     {
-        return $this->metaStorage->unlinkFrom($row);
+        return $this->linkStorage->unlinkFrom($key);
     }
     
     
     
     /**
-     * Returns the uri where the document can be downloaded.
-     *
-     * @param string $basePath
-     *
-     * @return \Psr\Http\Message\UriInterface
+     * @inheritdoc
+     */
+    public function isLinkedTo($key): bool
+    {
+        return $this->linkStorage->isLinkedTo($key);
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
      */
     public function getDownloadUri(string $basePath = ''): \Psr\Http\Message\UriInterface
     {
@@ -445,9 +442,7 @@ class Document extends AbstractDocument implements DocumentInterface
     
     
     /**
-     * Return the mime type as string.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getMimetype(): string
     {

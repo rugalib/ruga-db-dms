@@ -92,9 +92,9 @@ interface MetaStorageContainerDocumentInterface
     /**
      * Returns the stored MIME type.
      *
-     * @return string|null
+     * @return string
      */
-    public function getMimetype();
+    public function getMimetype(): string;
     
     
     
@@ -134,27 +134,6 @@ interface MetaStorageContainerDocumentInterface
      * @return \DateTimeImmutable
      */
     public function getLastModified(): \DateTimeImmutable;
-    
-    
-    
-    /**
-     * Link document to the given entity.
-     *
-     * @param RowInterface $row
-     *
-     * @deprecated
-     */
-    public function linkTo(RowInterface $row);
-    
-    
-    
-    /**
-     * Unlink document from the given entity.
-     *
-     * @return mixed
-     * @deprecated
-     */
-    public function unlinkFrom(RowInterface $row);
     
     
 }

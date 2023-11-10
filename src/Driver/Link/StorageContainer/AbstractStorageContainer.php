@@ -6,15 +6,25 @@
 
 declare(strict_types=1);
 
-namespace Ruga\Dms\Driver\Data\StorageContainer;
+
+namespace Ruga\Dms\Driver\Link\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
 use Ruga\Dms\Document\DocumentInterface;
-use Ruga\Dms\Driver\DataStorageContainerInterface;
+use Ruga\Dms\Driver\LinkStorageContainerInterface;
 
-abstract class AbstractStorageContainer implements DataStorageContainerInterface
+abstract class AbstractStorageContainer implements LinkStorageContainerInterface
 {
     private DocumentInterface $document;
+    
+    protected \SplObjectStorage $links;
+    
+    
+    
+    public function __construct()
+    {
+        $this->links = new \SplObjectStorage();
+    }
     
     
     
@@ -46,6 +56,5 @@ abstract class AbstractStorageContainer implements DataStorageContainerInterface
         $hashedUuid = Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', spl_object_hash($this)));
         return $hashedUuid->toString();
     }
-    
     
 }

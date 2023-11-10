@@ -12,6 +12,8 @@ use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\LibraryDriverInterface;
+use Ruga\Dms\Driver\LinkDriverInterface;
+use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
@@ -27,6 +29,7 @@ class Library extends AbstractLibrary implements LibraryInterface
     const CONFIG_DATASTORAGE = 'data-storage';
     private MetaDriverInterface $metaDriver;
     private DataDriverInterface $dataDriver;
+    private LinkDriverInterface $linkDriver;
     
     
     
@@ -37,6 +40,7 @@ class Library extends AbstractLibrary implements LibraryInterface
         
         $this->metaDriver = new \Ruga\Dms\Driver\Meta\MemoryDriver();
         $this->dataDriver = new \Ruga\Dms\Driver\Data\MemoryDriver();
+        $this->linkDriver = new \Ruga\Dms\Driver\Link\MemoryDriver();
 
 //        $this->metaAdapter = MetaAdapterFactory::factory($config[self::CONFIG_METASTORAGE] ?? []);
 //        $this->dataAdapter = DataAdapterFactory::factory($config[self::CONFIG_DATASTORAGE] ?? []);
@@ -51,8 +55,9 @@ class Library extends AbstractLibrary implements LibraryInterface
     {
         $metaStorage = $this->metaDriver->createStorage();
         $dataStorage = $this->dataDriver->createStorage();
+        $linkStorage = $this->linkDriver->createStorage();
         
-        $doc = new Document($this, $metaStorage, $dataStorage);
+        $doc = new Document($this, $metaStorage, $dataStorage, $linkStorage);
         $doc->setName($name);
         $doc->setDocumentType($documentType);
         return $doc;
@@ -67,10 +72,9 @@ class Library extends AbstractLibrary implements LibraryInterface
     {
         $metaStorageContainers = $this->metaDriver->findByUuid($uuid);
         $a = [];
-        /** @var MetaStorageContainerInterface $metaStorage */
-        foreach ($metaStorageContainers as $metaStorage) {
-            $dataStorage = $this->dataDriver->findByMetaStorage($metaStorage);
-            $a[] = new Document($this, $metaStorage, $dataStorage);
+        /** @var MetaStorageContainerInterface $metaStorageContainer */
+        foreach ($metaStorageContainers as $metaStorageContainer) {
+            $a[] = $metaStorageContainer->getDocument();
         }
         return new \ArrayIterator($a);
     }
@@ -80,10 +84,15 @@ class Library extends AbstractLibrary implements LibraryInterface
     /**
      * @inheritdoc
      */
-    public function findDocumentsByForeignKey($keys, $categories = null): \ArrayIterator
+    public function findDocumentsByForeignKey($key, $categories = null): \ArrayIterator
     {
-        throw new \RuntimeException('Not Implemented');
-        return new \ArrayIterator();
+        $linkStorageContainers = $this->linkDriver->findByForeignKey($key);
+        $a = [];
+        /** @var LinkStorageContainerInterface $linkStorageContainer */
+        foreach ($linkStorageContainers as $linkStorageContainer) {
+            $a[] = $linkStorageContainer->getDocument();
+        }
+        return new \ArrayIterator($a);
     }
     
     

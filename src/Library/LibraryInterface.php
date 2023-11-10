@@ -62,11 +62,11 @@ interface LibraryInterface
     /**
      * Find documents by foreign keys. This can be actually anything (ex. uniqueid, object hash, id, ...)
      *
-     * @param array|string      $keys
+     * @param mixed             $key
      * @param null|array|string $categories
      *
      * @return \ArrayIterator
      */
-    public function findDocumentsByForeignKey($keys, $categories = null): \ArrayIterator;
+    public function findDocumentsByForeignKey($key, $categories = null): \ArrayIterator;
     
 }
