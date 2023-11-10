@@ -39,4 +39,17 @@ class MemoryDriver implements DataDriverInterface
     {
         return $metaStorage->getDocument()->getDataStorageContainer();
     }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = \Ruga\Dms\Driver\Data\MemoryDriver::class;
+        return $config;
+    }
+    
 }

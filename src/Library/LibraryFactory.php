@@ -40,6 +40,7 @@ class LibraryFactory implements FactoryInterface
         $library = new Library($libraryDriver);
         
         $library->setName($options['name']);
+        $library->save();
         
         
         /*

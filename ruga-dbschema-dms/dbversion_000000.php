@@ -23,6 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 CREATE TABLE `{$libraryTable}` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(190) NULL,
+  `config` TEXT NULL,
   `remark` TEXT NULL,
   `created` DATETIME NULL,
   `createdBy` INT NULL,

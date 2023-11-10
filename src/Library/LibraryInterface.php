@@ -36,6 +36,24 @@ interface LibraryInterface
     
     
     /**
+     * Dump the current config.
+     *
+     * @return array
+     */
+    public function dumpConfig(): array;
+    
+    
+    
+    /**
+     * Persist the library to the storage backend.
+     *
+     * @return mixed
+     */
+    public function save();
+    
+    
+    
+    /**
      * Create a new document in the library.
      * The Document is NOT automatically saved after creation.
      *

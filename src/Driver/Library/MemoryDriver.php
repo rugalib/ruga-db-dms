@@ -31,4 +31,34 @@ class MemoryDriver implements MemoryDriverInterface
         $this->name = $name;
     }
     
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = MemoryDriverInterface::class;
+        return $config;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function setConfig(array $config)
+    {
+        // Not applicable
+    }
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function save()
+    {
+        // Not applicable
+    }
 }

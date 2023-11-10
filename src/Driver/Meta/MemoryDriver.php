@@ -41,7 +41,7 @@ class MemoryDriver implements MetaDriverInterface
     {
         $a = [];
         $uuids = is_array($uuid) ? $uuid : [$uuid];
-        foreach($uuids as $uuid) {
+        foreach ($uuids as $uuid) {
             if (array_key_exists($uuid, $this->storage)) {
                 $a[] = $this->storage[$uuid];
             }
@@ -68,6 +68,17 @@ class MemoryDriver implements MetaDriverInterface
             $a[] = new Document($this, $metaStorage, $dataStorage);
         }
         return new \ArrayIterator($a);
-        
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = \Ruga\Dms\Driver\Meta\MemoryDriver::class;
+        return $config;
     }
 }

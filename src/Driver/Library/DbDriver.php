@@ -34,7 +34,7 @@ class DbDriver implements DbDriverInterface
             ->where(['name' => $this->name]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();
-        if(!$row=$result->current()) {
+        if (!$row = $result->current()) {
             $row = new RowGateway('id', 'DmsLibrary', $this->adapter);
         }
         $this->row = $row;
@@ -58,6 +58,38 @@ class DbDriver implements DbDriverInterface
     public function setName(string $name)
     {
         $this->row->offsetSet('name', $name);
+        $this->row->save();
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = DbDriverInterface::class;
+        return $config;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function setConfig(array $config)
+    {
+        $this->row->offsetSet('config', Json::encode($config, true, ['prettyPrint' => true]));
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function save()
+    {
         $this->row->save();
     }
 }

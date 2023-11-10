@@ -56,11 +56,24 @@ class MemoryDriver implements LinkDriverInterface
     {
         $a = [];
         /** @var LinkStorageContainerInterface $linkStorageContainer */
-        foreach($this->storage as $linkStorageContainer) {
-            if($linkStorageContainer->isLinkedTo($key)) {
+        foreach ($this->storage as $linkStorageContainer) {
+            if ($linkStorageContainer->isLinkedTo($key)) {
                 $a[] = $linkStorageContainer;
             }
         }
         return new \ArrayIterator($a);
     }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = \Ruga\Dms\Driver\Link\MemoryDriver::class;
+        return $config;
+    }
+    
 }

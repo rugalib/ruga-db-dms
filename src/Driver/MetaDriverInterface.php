@@ -45,4 +45,13 @@ interface MetaDriverInterface
      */
     public function findByObject(RowInterface $row, $categories = null): \ArrayIterator;
     
+    
+    
+    /**
+     * Dump the current config.
+     *
+     * @return array
+     */
+    public function dumpConfig(): array;
+    
 }

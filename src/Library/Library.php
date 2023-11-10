@@ -27,24 +27,7 @@ class Library extends AbstractLibrary implements LibraryInterface
     const CONFIG_LIBRARYSTORAGE = 'library-storage';
     const CONFIG_METASTORAGE = 'meta-storage';
     const CONFIG_DATASTORAGE = 'data-storage';
-    private MetaDriverInterface $metaDriver;
-    private DataDriverInterface $dataDriver;
-    private LinkDriverInterface $linkDriver;
-    
-    
-    
-    public function __construct(LibraryDriverInterface $libraryDriver)
-    {
-        $this->libraryDriver = $libraryDriver;
-        
-        
-        $this->metaDriver = new \Ruga\Dms\Driver\Meta\MemoryDriver();
-        $this->dataDriver = new \Ruga\Dms\Driver\Data\MemoryDriver();
-        $this->linkDriver = new \Ruga\Dms\Driver\Link\MemoryDriver();
-
-//        $this->metaAdapter = MetaAdapterFactory::factory($config[self::CONFIG_METASTORAGE] ?? []);
-//        $this->dataAdapter = DataAdapterFactory::factory($config[self::CONFIG_DATASTORAGE] ?? []);
-    }
+    const CONFIG_LINKSTORAGE = 'link-storage';
     
     
     

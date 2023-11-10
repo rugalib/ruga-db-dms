@@ -12,7 +12,9 @@ namespace Ruga\Dms\Driver;
 
 interface LibraryDriverInterface
 {
-    CONST ATTR_NAME = 'name';
+    const ATTR_NAME = 'name';
+    
+    
     
     /**
      * Return the name of the library.
@@ -29,5 +31,34 @@ interface LibraryDriverInterface
      * @return string
      */
     public function setName(string $name);
+    
+    
+    
+    /**
+     * Dump the current config.
+     *
+     * @return array
+     */
+    public function dumpConfig(): array;
+    
+    
+    
+    /**
+     * Set the config.
+     *
+     * @param array $config
+     *
+     * @return mixed
+     */
+    public function setConfig(array $config);
+    
+    
+    
+    /**
+     * Persist the library to the storage backend.
+     *
+     * @return mixed
+     */
+    public function save();
     
 }

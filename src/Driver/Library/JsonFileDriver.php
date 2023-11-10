@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver\Library;
 
 use Laminas\Json\Json;
+use Ruga\Dms\Library\Library;
 
 class JsonFileDriver implements JsonFileDriverInterface
 {
@@ -62,5 +63,38 @@ class JsonFileDriver implements JsonFileDriverInterface
         $this->readFileIntoVar();
         $this->data[self::ATTR_NAME] = $name;
         $this->saveVarInFile();
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function save()
+    {
+        $this->saveVarInFile();
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function dumpConfig(): array
+    {
+        $config = [];
+        $config['driver'] = JsonFileDriverInterface::class;
+        $config['filepath'] = $this->filepath;
+        return $config;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function setConfig(array $config)
+    {
+        $this->data = $config;
     }
 }

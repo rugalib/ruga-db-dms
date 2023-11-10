@@ -40,4 +40,13 @@ interface LinkDriverInterface
      */
     public function findByForeignKey($key): \ArrayIterator;
     
+    
+    
+    /**
+     * Dump the current config.
+     *
+     * @return array
+     */
+    public function dumpConfig(): array;
+    
 }

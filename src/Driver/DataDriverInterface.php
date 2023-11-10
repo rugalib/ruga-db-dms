@@ -30,4 +30,12 @@ interface DataDriverInterface
     public function findByMetaStorage(MetaStorageContainerInterface $metaStorage): DataStorageContainerInterface;
     
     
+    
+    /**
+     * Dump the current config.
+     *
+     * @return array
+     */
+    public function dumpConfig(): array;
+    
 }
