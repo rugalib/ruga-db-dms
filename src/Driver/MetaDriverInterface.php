@@ -34,24 +34,19 @@ interface MetaDriverInterface
     
     
     /**
-     * Find documents by linked entity and by category.
-     *
-     * @param RowInterface $row
-     *
-     * @param null         $categories
-     *
-     * @return \ArrayIterator
-     * @deprecated
-     */
-    public function findByObject(RowInterface $row, $categories = null): \ArrayIterator;
-    
-    
-    
-    /**
      * Dump the current config.
      *
      * @return array
      */
     public function dumpConfig(): array;
+    
+    
+    
+    /**
+     * Persist the meta to the storage backend.
+     *
+     * @return mixed
+     */
+    public function save();
     
 }

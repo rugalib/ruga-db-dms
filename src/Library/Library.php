@@ -11,11 +11,7 @@ namespace Ruga\Dms\Library;
 use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Document\DocumentType;
-use Ruga\Dms\Driver\LibraryDriverInterface;
-use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
-use Ruga\Dms\Driver\MetaDriverInterface;
-use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
 /**

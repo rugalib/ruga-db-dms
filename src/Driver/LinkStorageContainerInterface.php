@@ -35,6 +35,15 @@ interface LinkStorageContainerInterface extends LinkStorageContainerDocumentInte
     
     
     /**
+     * Return the link driver.
+     *
+     * @return LinkDriverInterface
+     */
+    public function getLinkDriver(): LinkDriverInterface;
+    
+    
+    
+    /**
      * Return the unique id of the link record.
      * This Uuid is the same for the entire lifetime of the record.
      *

@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
-use Ruga\Db\Row\RowInterface;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
@@ -123,7 +122,6 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
     {
         if (($this->hash ?? '') != $hash) {
             $this->hash = $hash;
-            $this->lastmodified = new \DateTimeImmutable();
         }
     }
     
@@ -185,7 +183,9 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
      */
     public function save()
     {
-        // Not applicable
+        // MemoryStorageContainer has no save function
+        // calling parent driver's save()
+        $this->getMetaDriver()->save();
     }
     
     
@@ -206,5 +206,15 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
     public function getLastModified(): \DateTimeImmutable
     {
         return $this->lastmodified;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function setLastModified(\DateTimeImmutable $lastModified)
+    {
+        $this->lastmodified = $lastModified;
     }
 }

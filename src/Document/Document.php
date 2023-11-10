@@ -72,7 +72,6 @@ class Document extends AbstractDocument implements DocumentInterface
         if ($oldname != $name) {
             $this->metaStorage->setFilename($name);
             $this->dataStorage->rename($name);
-            $this->save();
         }
     }
     
@@ -180,6 +179,7 @@ class Document extends AbstractDocument implements DocumentInterface
     {
         $this->dataStorage->save();
         $this->metaStorage->save();
+        $this->linkStorage->save();
     }
     
     
@@ -197,8 +197,9 @@ class Document extends AbstractDocument implements DocumentInterface
     /**
      * @inheritdoc
      */
-    public function setContent(string $data): bool
+    public function setContent(string $data, ?\DateTimeImmutable $lastModified = null): bool
     {
+        $lastModified = $lastModified ?? (new \DateTimeImmutable());
         try {
             // Determine mime type and store in meta backend
             $finfo = new \finfo(FILEINFO_MIME);
@@ -213,7 +214,7 @@ class Document extends AbstractDocument implements DocumentInterface
                 
                 $this->setFilename($name);
             }
-            return $this->dataStorage->setContent($data);
+            return $this->dataStorage->setContent($data, $lastModified);
         } finally {
             $this->save();
         }
@@ -266,8 +267,6 @@ class Document extends AbstractDocument implements DocumentInterface
      */
     public function setContentFromFile(string $file, bool $deleteFileAfterImport = false): bool
     {
-        \Ruga\Log::functionHead();
-        
         if (!($fn = realpath($file))) {
             throw new \InvalidArgumentException("File '{$file}' not found.");
         }
@@ -278,7 +277,8 @@ class Document extends AbstractDocument implements DocumentInterface
         }
         
         try {
-            return $this->setContent(file_get_contents($fn));
+            $lastModified = \DateTimeImmutable::createFromFormat('U', strval(filemtime($fn)));
+            return $this->setContent(file_get_contents($fn), $lastModified);
         } finally {
             if ($deleteFileAfterImport) {
                 unlink($fn);

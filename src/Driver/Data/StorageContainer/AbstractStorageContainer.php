@@ -10,11 +10,20 @@ namespace Ruga\Dms\Driver\Data\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
 use Ruga\Dms\Document\DocumentInterface;
+use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 
 abstract class AbstractStorageContainer implements DataStorageContainerInterface
 {
     private DocumentInterface $document;
+    private DataDriverInterface $dataDriver;
+    
+    
+    
+    public function __construct(DataDriverInterface $dataDriver)
+    {
+        $this->dataDriver = $dataDriver;
+    }
     
     
     
@@ -34,6 +43,16 @@ abstract class AbstractStorageContainer implements DataStorageContainerInterface
     public function getDocument(): DocumentInterface
     {
         return $this->document;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function getDataDriver(): DataDriverInterface
+    {
+        return $this->dataDriver;
     }
     
     

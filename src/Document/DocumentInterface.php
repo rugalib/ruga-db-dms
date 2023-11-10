@@ -68,7 +68,7 @@ interface DocumentInterface extends MetaStorageContainerDocumentInterface,
     
     /**
      * Read content from a file and send it to the data backend.
-     * Calls save() on meta and data backend.
+     * Calls save() on meta, data and link backend.
      * Returns true if the file content has changed.
      *
      * @param string $file
@@ -82,7 +82,7 @@ interface DocumentInterface extends MetaStorageContainerDocumentInterface,
     
     /**
      * Executes the given $templatefile with an include and saves the resulting content to the document.
-     * Calls save() on meta nd data backend.
+     * Calls save() on meta, data and link backend.
      * Returns true if the file content has changed.
      *
      * @param string $templatefile

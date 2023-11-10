@@ -27,11 +27,12 @@ interface DataStorageContainerDocumentInterface
      * Calls save() on meta and data backend.
      * Returns true if the file content has changed.
      *
-     * @param string $data
+     * @param string                  $data
+     * @param \DateTimeImmutable|null $lastModified
      *
      * @return bool True if document has changed
      */
-    public function setContent(string $data): bool;
+    public function setContent(string $data, ?\DateTimeImmutable $lastModified=null): bool;
     
     
     

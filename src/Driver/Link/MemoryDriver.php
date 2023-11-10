@@ -32,7 +32,7 @@ class MemoryDriver implements LinkDriverInterface
      */
     public function createStorage(): LinkStorageContainerInterface
     {
-        $container = new MemoryStorageContainer();
+        $container = new MemoryStorageContainer($this);
         $this->storage->attach($container, $container);
         return $container;
     }
@@ -75,5 +75,16 @@ class MemoryDriver implements LinkDriverInterface
         $config['driver'] = \Ruga\Dms\Driver\Link\MemoryDriver::class;
         return $config;
     }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function save()
+    {
+        // Not applicable
+    }
+    
     
 }

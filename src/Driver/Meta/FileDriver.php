@@ -9,16 +9,23 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Meta;
 
-use Ruga\Db\Row\RowInterface;
-use Ruga\Dms\Document\Document;
-use Ruga\Dms\Driver\DataStorageContainerInterface;
+use Laminas\Json\Json;
 use Ruga\Dms\Driver\Meta\StorageContainer\MemoryStorageContainer;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
-class MemoryDriver extends AbstractDriver implements MetaDriverInterface
+class FileDriver implements MetaDriverInterface
 {
-    private array $storage = [];
+    private string $filepath;
+    private \SplObjectStorage $storage;
+    
+    
+    
+    public function __construct(array $options=[])
+    {
+        $this->filepath = $options['filepath'] ?? null;
+        $this->storage = new \SplObjectStorage();
+    }
     
     
     
@@ -28,7 +35,7 @@ class MemoryDriver extends AbstractDriver implements MetaDriverInterface
     public function createStorage(): MetaStorageContainerInterface
     {
         $container = new MemoryStorageContainer($this);
-        $this->storage[$container->getUuid()] = $container;
+        $this->storage->attach($container, $container->getUuid());
         return $container;
     }
     
@@ -40,10 +47,10 @@ class MemoryDriver extends AbstractDriver implements MetaDriverInterface
     public function findByUuid($uuid): \ArrayIterator
     {
         $a = [];
-        $uuids = is_array($uuid) ? $uuid : [$uuid];
-        foreach ($uuids as $uuid) {
-            if (array_key_exists($uuid, $this->storage)) {
-                $a[] = $this->storage[$uuid];
+        /** @var MetaStorageContainerInterface $item */
+        foreach ($this->storage as $item) {
+            if ($item->getUuid() === $uuid) {
+                $a[] = $item;
             }
         }
         return new \ArrayIterator($a);
@@ -57,19 +64,24 @@ class MemoryDriver extends AbstractDriver implements MetaDriverInterface
     public function dumpConfig(): array
     {
         $config = [];
-        $config['driver'] = \Ruga\Dms\Driver\Meta\MemoryDriver::class;
+        $config['driver'] = \Ruga\Dms\Driver\Meta\FileDriver::class;
+        $config['filepath'] = $this->filepath;
         return $config;
     }
     
     
     
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function save()
     {
-        // Not applicable
+        $a = [];
+        /** @var MetaStorageContainerInterface $item */
+        foreach($this->storage as $item) {
+            $a[] = $item->toArray();
+        }
+        
+        file_put_contents($this->filepath, Json::encode($a, true, ['prettyPrint' => true]));
     }
-    
-    
 }

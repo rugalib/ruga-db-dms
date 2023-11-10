@@ -26,14 +26,29 @@ abstract class AbstractLibrary implements LibraryInterface
     
     
     
-    public function __construct(LibraryDriverInterface $libraryDriver)
+    public function __construct(LibraryDriverInterface $libraryDriver, array $options = [])
     {
         $this->libraryDriver = $libraryDriver;
         
+        $metaDriverName = $options[Library::CONFIG_METASTORAGE]['driver'] ?? \Ruga\Dms\Driver\Meta\MemoryDriver::class;
+        if (is_a($metaDriverName, MetaDriverInterface::class, true)) {
+            $this->metaDriver = new $metaDriverName($options[Library::CONFIG_METASTORAGE] ?? []);
+        }
         
-        $this->metaDriver = new \Ruga\Dms\Driver\Meta\MemoryDriver();
-        $this->dataDriver = new \Ruga\Dms\Driver\Data\MemoryDriver();
-        $this->linkDriver = new \Ruga\Dms\Driver\Link\MemoryDriver();
+        $dataDriverName = $options[Library::CONFIG_DATASTORAGE]['driver'] ?? \Ruga\Dms\Driver\Data\MemoryDriver::class;
+        if (is_a($dataDriverName, DataDriverInterface::class, true)) {
+            $this->dataDriver = new $dataDriverName($options[Library::CONFIG_DATASTORAGE] ?? []);
+        }
+        
+        $linkDriverName = $options[Library::CONFIG_LINKSTORAGE]['driver'] ?? \Ruga\Dms\Driver\Link\MemoryDriver::class;
+        if (is_a($linkDriverName, LinkDriverInterface::class, true)) {
+            $this->linkDriver = new $linkDriverName($options[Library::CONFIG_LINKSTORAGE] ?? []);
+        }
+
+
+//        $this->metaDriver = new \Ruga\Dms\Driver\Meta\MemoryDriver();
+//        $this->dataDriver = new \Ruga\Dms\Driver\Data\MemoryDriver();
+//        $this->linkDriver = new \Ruga\Dms\Driver\Link\MemoryDriver();
 
 //        $this->metaAdapter = MetaAdapterFactory::factory($config[self::CONFIG_METASTORAGE] ?? []);
 //        $this->dataAdapter = DataAdapterFactory::factory($config[self::CONFIG_DATASTORAGE] ?? []);
@@ -66,6 +81,10 @@ abstract class AbstractLibrary implements LibraryInterface
      */
     public function save()
     {
+//        $this->dataDriver->save();
+        $this->metaDriver->save();
+//        $this->linkDriver->save();
+        
         $config = $this->dumpConfig();
         $this->libraryDriver->setConfig($config);
         $this->libraryDriver->save();

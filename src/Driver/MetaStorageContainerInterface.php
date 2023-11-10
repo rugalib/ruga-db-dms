@@ -36,6 +36,15 @@ interface MetaStorageContainerInterface extends MetaStorageContainerDocumentInte
     
     
     /**
+     * Return the meta driver.
+     *
+     * @return MetaDriverInterface
+     */
+    public function getMetaDriver(): MetaDriverInterface;
+    
+    
+    
+    /**
      * Returns the stored file hash.
      *
      * @return string|null
@@ -114,5 +123,15 @@ interface MetaStorageContainerInterface extends MetaStorageContainerDocumentInte
      */
     public function setDataUniqueKey(string $key);
     
+    
+    
+    /**
+     * Sets the last modified date to the given value.
+     *
+     * @param \DateTimeImmutable $lastModified
+     *
+     * @return mixed
+     */
+    public function setLastModified(\DateTimeImmutable $lastModified);
     
 }

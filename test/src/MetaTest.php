@@ -10,6 +10,8 @@ namespace Ruga\Dms\Test;
 
 use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentType;
+use Ruga\Dms\Driver\Library\JsonFileDriverInterface;
+use Ruga\Dms\Driver\Meta\FileDriver;
 use Ruga\Dms\Library\Library;
 use Ruga\Dms\Library\LibraryInterface;
 
@@ -220,6 +222,37 @@ EOT;
         $this->assertSame(filesize($filename), $doc2->getContentLength());
     }
     
+    
+    public function testCanCreateLibraryWithFileMeta(): void
+    {
+        $config = [
+            'name' => 'Customized Library',
+            Library::CONFIG_LIBRARYSTORAGE => [
+                'driver' => JsonFileDriverInterface::class,
+                'filepath' => __DIR__ . '/../data/libraries/lib1.json',
+            ],
+            Library::CONFIG_METASTORAGE => [
+                'driver' => FileDriver::class,
+                'filepath' => __DIR__ . '/../data/libraries/lib1_meta.json',
+            ],
+        ];
+        
+        $library = $this->getContainer()->build(LibraryInterface::class, $config);
+        $this->assertInstanceOf(Library::class, $library);
+        
+        $document = $library->createDocument('image 1', DocumentType::IMAGE());
+        $filename = __DIR__ . '/../data/examples/Dinosaur Meme.jpg';
+        $document->setContentFromFile($filename);
+        
+        $document = $library->createDocument('image 2', DocumentType::IMAGE());
+        $filename = __DIR__ . '/../data/examples/2b or !2b.png';
+        $document->setContentFromFile($filename);
+        
+        $document = $library->createDocument('image 3', DocumentType::IMAGE());
+        $filename = __DIR__ . '/../data/examples/shutdown-command.gif';
+        $document->setContentFromFile($filename);
+        
+    }
     
 }
 

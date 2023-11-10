@@ -11,18 +11,20 @@ namespace Ruga\Dms\Driver\Link\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
 use Ruga\Dms\Document\DocumentInterface;
+use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 
 abstract class AbstractStorageContainer implements LinkStorageContainerInterface
 {
     private DocumentInterface $document;
-    
     protected \SplObjectStorage $links;
+    private LinkDriverInterface $linkDriver;
     
     
     
-    public function __construct()
+    public function __construct(LinkDriverInterface $linkDriver)
     {
+        $this->linkDriver = $linkDriver;
         $this->links = new \SplObjectStorage();
     }
     
@@ -44,6 +46,16 @@ abstract class AbstractStorageContainer implements LinkStorageContainerInterface
     public function getDocument(): DocumentInterface
     {
         return $this->document;
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function getLinkDriver(): LinkDriverInterface
+    {
+        return $this->linkDriver;
     }
     
     

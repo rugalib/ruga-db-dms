@@ -22,7 +22,9 @@ class MemoryStorageContainer extends AbstractStorageContainer implements DataSto
      */
     public function save()
     {
-        // Not applicable
+        // MemoryStorageContainer has no save function
+        // calling parent driver's save()
+        $this->getDataDriver()->save();
     }
     
     
@@ -40,19 +42,18 @@ class MemoryStorageContainer extends AbstractStorageContainer implements DataSto
     /**
      * @inheritDoc
      */
-    public function setContent($data): bool
+    public function setContent(string $data, ?\DateTimeImmutable $lastModified = null): bool
     {
         $metaStorage = $this->getDocument()->getMetaStorageContainer();
-        
         $newhash = $metaStorage->calculateHash($data);
-        
         // Hash changed => persist new content to the data backend
         if ($newhash != $metaStorage->getHash()) {
             $this->content = $data;
             $metaStorage->setHash($newhash);
+            $lastModified = $lastModified ?? (new \DateTimeImmutable());
+            $metaStorage->setLastModified($lastModified);
             return true;
         }
-        
         return false;
     }
     

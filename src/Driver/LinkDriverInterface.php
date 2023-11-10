@@ -49,4 +49,13 @@ interface LinkDriverInterface
      */
     public function dumpConfig(): array;
     
+    
+    
+    /**
+     * Persist the links to the storage backend.
+     *
+     * @return mixed
+     */
+    public function save();
+    
 }

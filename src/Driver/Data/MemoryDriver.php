@@ -25,7 +25,7 @@ class MemoryDriver implements DataDriverInterface
      */
     public function createStorage(): DataStorageContainerInterface
     {
-        $container = new MemoryStorageContainer();
+        $container = new MemoryStorageContainer($this);
         $this->storage[$container->getUuid()] = $container;
         return $container;
     }
@@ -51,5 +51,16 @@ class MemoryDriver implements DataDriverInterface
         $config['driver'] = \Ruga\Dms\Driver\Data\MemoryDriver::class;
         return $config;
     }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function save()
+    {
+        // Not applicable
+    }
+    
     
 }

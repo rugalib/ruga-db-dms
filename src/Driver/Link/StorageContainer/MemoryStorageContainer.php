@@ -95,7 +95,9 @@ class MemoryStorageContainer extends AbstractStorageContainer implements LinkSto
      */
     public function save()
     {
-        // Not applicable
+        // MemoryStorageContainer has no save function
+        // calling parent driver's save()
+        $this->getLinkDriver()->save();
     }
     
     

@@ -38,4 +38,13 @@ interface DataDriverInterface
      */
     public function dumpConfig(): array;
     
+    
+    
+    /**
+     * Persist the data to the storage backend.
+     *
+     * @return mixed
+     */
+    public function save();
+    
 }

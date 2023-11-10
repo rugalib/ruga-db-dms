@@ -15,7 +15,7 @@ interface DataStorageContainerInterface extends DataStorageContainerDocumentInte
     
     /**
      * Set the document object. This function is used by the adapter to deliver the corresponding document object to
-     * the storage object.     *
+     * the storage object.
      *
      * @param DocumentInterface $document
      *
@@ -31,6 +31,15 @@ interface DataStorageContainerInterface extends DataStorageContainerDocumentInte
      * @return DocumentInterface
      */
     public function getDocument(): DocumentInterface;
+    
+    
+    
+    /**
+     * Return the data driver.
+     *
+     * @return DataDriverInterface
+     */
+    public function getDataDriver(): DataDriverInterface;
     
     
     
