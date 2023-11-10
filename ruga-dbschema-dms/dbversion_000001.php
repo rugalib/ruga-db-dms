@@ -11,42 +11,57 @@ declare(strict_types=1);
  * @var \Ruga\Db\Schema\Resolver $resolver
  * @var string                   $comp_name
  */
-$person = $resolver->getTableName(\Ruga\Person\PersonTable::class);
+$userTable = 'User';
+//$libraryTable = $resolver->getTableName(\Ruga\Dms\Model\LibraryTable::class);
+$libraryTable = 'DmsLibrary';
+$tableDocument = $resolver->getTableName(\Ruga\Dms\Model\DocumentTable::class);
+if ($document_type_values = implode("','", \Ruga\Dms\Document\DocumentType::getConstants())) {
+    $document_type_values = "'{$document_type_values}'";
+}
 
 return /** @lang MySQL */
     <<<"SQL"
-
 SET FOREIGN_KEY_CHECKS = 0;
-CREATE TABLE `{$person}` (
+CREATE TABLE `{$tableDocument}` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `fullname` VARCHAR(190) NULL,
-  `salutation` VARCHAR(190) NULL DEFAULT NULL,
-  `first_name` VARCHAR(190) NULL DEFAULT NULL,
-  `title` VARCHAR(190) NULL DEFAULT NULL,
-  `prefix` VARCHAR(190) NULL DEFAULT NULL,
-  `last_name` VARCHAR(190) NULL DEFAULT NULL,
-  `middle_name` VARCHAR(190) NULL DEFAULT NULL,
-  `birth_name` VARCHAR(190) NULL DEFAULT NULL,
-  `religious_name` VARCHAR(190) NULL DEFAULT NULL,
-  `nickname` VARCHAR(190) NULL DEFAULT NULL,
-  `gender` VARCHAR(3) NULL DEFAULT NULL,
-  `nationality` VARCHAR(3) NULL DEFAULT NULL,
-  `language` VARCHAR(3) NULL DEFAULT NULL,
-  `date_of_birth` DATE NULL DEFAULT NULL,
-  `date_of_death` DATE NULL DEFAULT NULL,
-  `remark` TEXT NULL,
-  `created` DATETIME NULL,
-  `createdBy` INT NULL,
-  `changed` DATETIME NULL,
-  `changedBy` INT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `{$person}_fullname_idx` (`fullname`),
-  INDEX `fk_{$person}_changedBy_idx` (`changedBy` ASC),
-  INDEX `fk_{$person}_createdBy_idx` (`createdBy` ASC),
-  CONSTRAINT `fk_{$person}_changedBy` FOREIGN KEY (`changedBy`) REFERENCES `User` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_{$person}_createdBy` FOREIGN KEY (`createdBy`) REFERENCES `User` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  `fullname` VARCHAR(255) DEFAULT NULL,
+  `name` VARCHAR(255),
+  `uuid` VARCHAR(36),
+  `library` VARCHAR(255),
+  `category` VARCHAR(255) DEFAULT NULL,
+  `document_type` ENUM({$document_type_values}) NOT NULL DEFAULT 'GENERIC',
+  `mimetype` VARCHAR(255) DEFAULT NULL,
+  `lastmodified` DATETIME DEFAULT NULL,
+  `filename` VARCHAR(255) DEFAULT NULL,
+  `priority` INT NOT NULL DEFAULT '0',
+  `datapath` VARCHAR(255) DEFAULT NULL,
+  `datahash` VARCHAR(64) DEFAULT NULL,
+  `metadata` TEXT,
+  
+  `remark` TEXT NULL DEFAULT NULL,
+  `created` DATETIME NOT NULL,
+  `createdBy` INT DEFAULT '0',
+  `changed` DATETIME NOT NULL,
+  `changedBy` INT DEFAULT '0',
+
+  PRIMARY KEY (`id` ASC),
+  INDEX `{$tableDocument}_fullname_idx` (`fullname`),
+  UNIQUE INDEX `{$tableDocument}_data_unique_key_UNIQUE` (`datapath`),
+  INDEX `{$tableDocument}_document_type_idx` (`document_type`),
+  INDEX `{$tableDocument}_priority_idx` (`priority`),
+  INDEX `{$tableDocument}_mimetype_idx` (`mimetype`),
+  INDEX `{$tableDocument}_name_idx` (`name`),
+  INDEX `{$tableDocument}_uuid_idx` (`uuid`),
+  INDEX `{$tableDocument}_filepath_idx` (`filename`),
+  INDEX `{$tableDocument}_library_idx` (`library`),
+  INDEX `{$tableDocument}_category_idx` (`category`),
+
+  INDEX `fk_{$tableDocument}_changedBy_idx` (`changedBy`),
+  INDEX `fk_{$tableDocument}_createdBy_idx` (`createdBy`)
+  # CONSTRAINT `fk_{$tableDocument}_changedBy` FOREIGN KEY (`changedBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  # CONSTRAINT `fk_{$tableDocument}_createdBy` FOREIGN KEY (`createdBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 )
-ENGINE=InnoDB
+ENGINE = InnoDB
 ;
 SET FOREIGN_KEY_CHECKS = 1;
 

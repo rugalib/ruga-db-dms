@@ -10,8 +10,6 @@ namespace Ruga\Dms;
 
 use Ruga\Db\Schema\Updater;
 
-use const Ruga\Dms\FileAdapterFactory as FileAdapterFactoryAlias;
-
 /**
  * ConfigProvider.
  *
@@ -31,9 +29,10 @@ class ConfigProvider
                 Updater::class => [
                     'components' => [
                         Dms::class => [
-                            Updater::CONF_REQUESTED_VERSION => 1,
+                            Updater::CONF_REQUESTED_VERSION => 2,
                             Updater::CONF_SCHEMA_DIRECTORY => __DIR__ . '/../ruga-dbschema-dms',
                             Updater::CONF_TABLES => [
+                                'DocumentTable' => \Ruga\Dms\Model\DocumentTable::class,
 //                                'LibraryTable' => \Ruga\Dms\Library\LibraryTable::class,
                             ],
                         ],

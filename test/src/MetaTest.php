@@ -15,6 +15,7 @@ use Ruga\Dms\Driver\Meta\DbDriver;
 use Ruga\Dms\Driver\Meta\FileDriver;
 use Ruga\Dms\Library\Library;
 use Ruga\Dms\Library\LibraryInterface;
+use Ruga\Dms\Model\DocumentTable;
 
 /**
  * @author                 Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
@@ -266,6 +267,7 @@ EOT;
             ],
             Library::CONFIG_METASTORAGE => [
                 'driver' => DbDriver::class,
+                'adapter' => $this->getAdapter(),
             ],
         ];
         

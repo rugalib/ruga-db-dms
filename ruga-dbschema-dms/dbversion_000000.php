@@ -13,7 +13,6 @@ declare(strict_types=1);
  */
 $userTable = 'User';
 //$libraryTable = $resolver->getTableName(\Ruga\Dms\Model\LibraryTable::class);
-
 $libraryTable = 'DmsLibrary';
 
 return /** @lang MySQL */
