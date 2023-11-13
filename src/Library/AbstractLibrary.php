@@ -33,16 +33,22 @@ abstract class AbstractLibrary implements LibraryInterface
         $metaDriverName = $options[Library::CONFIG_METASTORAGE]['driver'] ?? \Ruga\Dms\Driver\Meta\MemoryDriver::class;
         if (is_a($metaDriverName, MetaDriverInterface::class, true)) {
             $this->metaDriver = new $metaDriverName($options[Library::CONFIG_METASTORAGE] ?? []);
+        } else {
+            throw new \InvalidArgumentException("'{$metaDriverName}' is not a valid MetaDriverInterface");
         }
         
         $dataDriverName = $options[Library::CONFIG_DATASTORAGE]['driver'] ?? \Ruga\Dms\Driver\Data\MemoryDriver::class;
         if (is_a($dataDriverName, DataDriverInterface::class, true)) {
             $this->dataDriver = new $dataDriverName($options[Library::CONFIG_DATASTORAGE] ?? []);
+        } else {
+            throw new \InvalidArgumentException("'{$dataDriverName}' is not a valid DataDriverInterface");
         }
         
         $linkDriverName = $options[Library::CONFIG_LINKSTORAGE]['driver'] ?? \Ruga\Dms\Driver\Link\MemoryDriver::class;
         if (is_a($linkDriverName, LinkDriverInterface::class, true)) {
             $this->linkDriver = new $linkDriverName($options[Library::CONFIG_LINKSTORAGE] ?? []);
+        } else {
+            throw new \InvalidArgumentException("'{$linkDriverName}' is not a valid LinkDriverInterface");
         }
 
 

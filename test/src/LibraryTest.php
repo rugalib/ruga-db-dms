@@ -36,15 +36,15 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
                 'driver' => JsonFileDriverInterface::class,
                 'filepath' => __DIR__ . '/../data/libraries/lib1.json',
             ],
-            Library::CONFIG_METASTORAGE => [
-                'driver' => 'db',
-                'adapter' => $this->getAdapter(),
+//            Library::CONFIG_METASTORAGE => [
+//                'driver' => 'db',
+//                'adapter' => $this->getAdapter(),
 //                'table' => \Ruga\Dms\Adapter\Meta\Db\DocumentTable::class,
-            ],
-            Library::CONFIG_DATASTORAGE => [
-                'driver' => 'filesystem',
-                'path' => __DIR__ . '/data/files',
-            ],
+//            ],
+//            Library::CONFIG_DATASTORAGE => [
+//                'driver' => 'filesystem',
+//                'path' => __DIR__ . '/data/files',
+//            ],
         ];
 
         $library = $this->getContainer()->build(LibraryInterface::class, $config);
@@ -61,15 +61,15 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
             Library::CONFIG_LIBRARYSTORAGE => [
                 'driver' => DbDriverInterface::class,
             ],
-            Library::CONFIG_METASTORAGE => [
-                'driver' => 'db',
-                'adapter' => $this->getAdapter(),
+//            Library::CONFIG_METASTORAGE => [
+//                'driver' => 'db',
+//                'adapter' => $this->getAdapter(),
 //                'table' => \Ruga\Dms\Adapter\Meta\Db\DocumentTable::class,
-            ],
-            Library::CONFIG_DATASTORAGE => [
-                'driver' => 'filesystem',
-                'path' => __DIR__ . '/data/files',
-            ],
+//            ],
+//            Library::CONFIG_DATASTORAGE => [
+//                'driver' => 'filesystem',
+//                'path' => __DIR__ . '/data/files',
+//            ],
         ];
         
         $library = $this->getContainer()->build(LibraryInterface::class, $config);

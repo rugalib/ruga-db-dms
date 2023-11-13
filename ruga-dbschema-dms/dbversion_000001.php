@@ -46,7 +46,7 @@ CREATE TABLE `{$tableDocument}` (
 
   PRIMARY KEY (`id` ASC),
   INDEX `{$tableDocument}_fullname_idx` (`fullname`),
-  UNIQUE INDEX `{$tableDocument}_data_unique_key_UNIQUE` (`datapath`),
+  UNIQUE INDEX `{$tableDocument}_datapath_UNIQUE` (`datapath`),
   INDEX `{$tableDocument}_document_type_idx` (`document_type`),
   INDEX `{$tableDocument}_priority_idx` (`priority`),
   INDEX `{$tableDocument}_mimetype_idx` (`mimetype`),
