@@ -64,14 +64,16 @@ class Document extends AbstractDocument implements DocumentInterface
      */
     public function setFilename(string $name)
     {
+        $name = ltrim($name, '/\\');
+        $name = str_replace(["/", "\\"], DIRECTORY_SEPARATOR, $name);
         if (!preg_match("/^[^\/:*?\"<>|]+(\.[^\/:*?\"<>|]+)?$/", $name)) {
             throw new \InvalidArgumentException("'{$name}' is not a valid file name");
         }
         
         $oldname = $this->getFilename();
         if ($oldname != $name) {
-            $this->metaStorage->setFilename($name);
             $this->dataStorage->rename($name);
+            $this->metaStorage->setFilename($name);
         }
     }
     

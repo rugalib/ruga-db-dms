@@ -52,7 +52,8 @@ interface MetaStorageContainerDocumentInterface
     
     
     /**
-     * Set the name of the file for downloading. Depending on the data storage backend, this name is also used.
+     * Set the name of the file for downloading. Depending on the data storage backend, this name is also used for
+     * content storage.
      * If this function is called again with a different name, the file is renamed in the backend (if applicable).
      * This function saves the data and meta backend if the $name changes.
      *

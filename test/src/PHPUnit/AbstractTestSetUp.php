@@ -42,12 +42,15 @@ abstract class AbstractTestSetUp extends \Ruga\Db\PHPUnit\AbstractTestSetUp
         foreach (glob(__DIR__ . "/../../tmp/*") as $file) {
             unlink($file);
         }
-        foreach (glob(__DIR__ . "/../../data/files/*") as $file) {
-            unlink($file);
-        }
+//        foreach (glob(__DIR__ . "/../../data/files/*") as $file) {
+//            unlink($file);
+//        }
         foreach (glob(__DIR__ . "/../../data/libraries/*") as $file) {
             unlink($file);
         }
+        
+        
+        $this->rm(__DIR__ . "/../../data/files/");
         
         
 //        foreach (glob(__DIR__ . "/../data/config_files/*") as $file) {
