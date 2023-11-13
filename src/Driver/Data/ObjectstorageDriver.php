@@ -13,7 +13,7 @@ use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
-class FilesystemDriver implements DataDriverInterface
+class ObjectstorageDriver implements DataDriverInterface
 {
     private \SplObjectStorage $storage;
     private string $basepath;
@@ -60,7 +60,7 @@ class FilesystemDriver implements DataDriverInterface
     public function dumpConfig(): array
     {
         $config = [];
-        $config['driver'] = \Ruga\Dms\Driver\Data\FilesystemDriver::class;
+        $config['driver'] = \Ruga\Dms\Driver\Data\ObjectstorageDriver::class;
         $config['basepath'] = $this->basepath;
         return $config;
     }
@@ -86,16 +86,18 @@ class FilesystemDriver implements DataDriverInterface
     
     public function getDataFilename(DataStorageContainerInterface $dataStorageContainer): string
     {
-        return $dataStorageContainer->getDocument()->getMetaStorageContainer()->getDataUniqueKey()
-            ?? $dataStorageContainer->getDocument()->getMetaStorageContainer()->getFilename()
-            ?? '';
+        $uuid = $dataStorageContainer->getDocument()->getMetaStorageContainer()->getUuid();
+        [$dirpart, $filepart] = explode('-', $uuid, 2);
+        return chunk_split($dirpart, 2, DIRECTORY_SEPARATOR) . $filepart;
     }
     
     
     
     public function setDataFilename(DataStorageContainerInterface $dataStorageContainer, $dataFilename)
     {
-        $dataStorageContainer->getDocument()->getMetaStorageContainer()->setDataUniqueKey($dataFilename);
+        $dataStorageContainer->getDocument()->getMetaStorageContainer()->setDataUniqueKey(
+            $this->getDataFilename($dataStorageContainer)
+        );
     }
     
 }

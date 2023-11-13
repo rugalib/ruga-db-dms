@@ -118,14 +118,20 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
      */
     public function rename(string $newname)
     {
+        $oldFilename = $this->getDataFilename();
+        $this->setDataFilename($newname);
+        $newFilename = $this->getDataFilename();
+        
         if ($this->fileExists($newname)) {
             throw new \InvalidArgumentException("File '{$newname}' already exists");
         }
         
-        if ($this->fileExists()) {
-            $filename = $this->getDataFilename();
-            if (rename($this->buildFilepath($filename), $this->prepareFilepath($this->buildFilepath($newname)))) {
-                $this->getDocument()->getMetaStorageContainer()->setDataUniqueKey($newname);
+        if ($this->fileExists($oldFilename) && ($oldFilename != $newFilename)) {
+            if (rename(
+                $this->buildFilepath($oldFilename),
+                $this->prepareFilepath($this->buildFilepath($newFilename))
+            )) {
+                $this->setDataFilename($newFilename);
             }
         }
     }
