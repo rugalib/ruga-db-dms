@@ -29,9 +29,9 @@ interface MetaStorageContainerInterface extends MetaStorageContainerDocumentInte
     /**
      * Return the stored document object.
      *
-     * @return DocumentInterface
+     * @return null|DocumentInterface
      */
-    public function getDocument(): DocumentInterface;
+    public function getDocument(): ?DocumentInterface;
     
     
     

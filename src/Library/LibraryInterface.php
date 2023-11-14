@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ruga\Dms\Library;
 
 
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Document\DocumentType;
 
@@ -69,7 +70,7 @@ interface LibraryInterface
     /**
      * Find documents by UUID.
      *
-     * @param array|string $uuid
+     * @param array|string|UuidInterface $uuid
      *
      * @return \ArrayIterator
      */

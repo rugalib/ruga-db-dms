@@ -32,7 +32,7 @@ abstract class AbstractLibrary implements LibraryInterface
         
         $metaDriverName = $options[Library::CONFIG_METASTORAGE]['driver'] ?? \Ruga\Dms\Driver\Meta\MemoryDriver::class;
         if (is_a($metaDriverName, MetaDriverInterface::class, true)) {
-            $this->metaDriver = new $metaDriverName($options[Library::CONFIG_METASTORAGE] ?? []);
+            $this->metaDriver = new $metaDriverName($this, $options[Library::CONFIG_METASTORAGE] ?? []);
         } else {
             throw new \InvalidArgumentException("'{$metaDriverName}' is not a valid MetaDriverInterface");
         }

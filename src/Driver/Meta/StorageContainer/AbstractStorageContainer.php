@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
+use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
@@ -39,9 +40,9 @@ abstract class AbstractStorageContainer implements MetaStorageContainerInterface
     /**
      * @inheritdoc
      */
-    public function getDocument(): DocumentInterface
+    public function getDocument(): ?DocumentInterface
     {
-        return $this->document;
+        return $this->document ?? null;
     }
     
     

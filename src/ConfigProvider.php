@@ -29,10 +29,11 @@ class ConfigProvider
                 Updater::class => [
                     'components' => [
                         Dms::class => [
-                            Updater::CONF_REQUESTED_VERSION => 2,
+                            Updater::CONF_REQUESTED_VERSION => 3,
                             Updater::CONF_SCHEMA_DIRECTORY => __DIR__ . '/../ruga-dbschema-dms',
                             Updater::CONF_TABLES => [
                                 'DocumentTable' => \Ruga\Dms\Model\DocumentTable::class,
+                                'LinkTable' => \Ruga\Dms\Model\LinkTable::class,
 //                                'LibraryTable' => \Ruga\Dms\Library\LibraryTable::class,
                             ],
                         ],

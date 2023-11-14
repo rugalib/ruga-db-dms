@@ -34,7 +34,7 @@ class Library extends AbstractLibrary implements LibraryInterface
     {
         $metaStorage = $this->metaDriver->createStorage();
         $dataStorage = $this->dataDriver->createStorage();
-        $linkStorage = $this->linkDriver->createStorage();
+        $linkStorage = $this->linkDriver->createStorage($metaStorage->getUuid());
         
         $doc = new Document($this, $metaStorage, $dataStorage, $linkStorage);
         $doc->setName($name);
@@ -53,7 +53,12 @@ class Library extends AbstractLibrary implements LibraryInterface
         $a = [];
         /** @var MetaStorageContainerInterface $metaStorageContainer */
         foreach ($metaStorageContainers as $metaStorageContainer) {
-            $a[] = $metaStorageContainer->getDocument();
+            if (!$doc = $metaStorageContainer->getDocument()) {
+                $dataStorage = $this->dataDriver->createStorage();
+                $linkStorage = $this->linkDriver->createStorage($metaStorageContainer->getUuid());
+                $doc = new Document($this, $metaStorageContainer, $dataStorage, $linkStorage);
+            }
+            $a[] = $doc;
         }
         return new \ArrayIterator($a);
     }
@@ -69,6 +74,9 @@ class Library extends AbstractLibrary implements LibraryInterface
         $a = [];
         /** @var LinkStorageContainerInterface $linkStorageContainer */
         foreach ($linkStorageContainers as $linkStorageContainer) {
+//            $linkStorageContainer->getUuid();
+            
+            
             $a[] = $linkStorageContainer->getDocument();
         }
         return new \ArrayIterator($a);

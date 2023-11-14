@@ -10,8 +10,10 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
+use Ruga\Dms\MetaUuid;
 
 class MemoryStorageContainer extends AbstractStorageContainer implements MetaStorageContainerInterface
 {
@@ -170,10 +172,9 @@ class MemoryStorageContainer extends AbstractStorageContainer implements MetaSto
     /**
      * @inheritDoc
      */
-    public function getUuid(): string
+    public function getUuid(): UuidInterface
     {
-        $hashedUuid = Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', spl_object_hash($this)));
-        return $hashedUuid->toString();
+        return Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', spl_object_hash($this)));
     }
     
     

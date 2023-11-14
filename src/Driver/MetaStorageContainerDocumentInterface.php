@@ -8,8 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver;
 
-use Ruga\Db\Row\RowInterface;
-use Ruga\Dms\Document\DocumentInterface;
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentType;
 
 interface MetaStorageContainerDocumentInterface
@@ -123,9 +122,9 @@ interface MetaStorageContainerDocumentInterface
      * Return the unique id of the meta record.
      * This Uuid is the same for the entire lifetime of the meta record.
      *
-     * @return string
+     * @return UuidInterface
      */
-    public function getUuid(): string;
+    public function getUuid(): UuidInterface;
     
     
     

@@ -8,25 +8,27 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Meta;
 
-use Laminas\Db\Sql\Sql;
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Adapter\AdapterInterface;
-use Ruga\Db\Row\RowInterface;
 use Ruga\Db\Table\AbstractTable;
 use Ruga\Dms\Document\AbstractDocument;
 use Ruga\Dms\Driver\Meta\StorageContainer\DbStorageContainer;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
+use Ruga\Dms\Library\LibraryInterface;
 use Ruga\Dms\Model\DocumentTable;
 
-class DbDriver implements MetaDriverInterface
+class DbDriver extends AbstractDriver implements MetaDriverInterface
 {
     private AbstractTable $table;
     private \SplObjectStorage $storage;
     
     
     
-    public function __construct(array $config)
+    public function __construct(LibraryInterface $library, array $config)
     {
+        parent::__construct($library);
+        
         $this->storage = new \SplObjectStorage();
         
         if (($config['table'] ?? '') instanceof AbstractTable) {
@@ -62,11 +64,16 @@ class DbDriver implements MetaDriverInterface
      */
     public function findByUuid($uuid): \ArrayIterator
     {
+        if ($uuid instanceof UuidInterface) {
+            $uuid = $uuid->toString();
+        }
         $rs = $this->table->select(['uuid' => $uuid]);
         $a = [];
         /** @var AbstractDocument $r */
         foreach ($rs as $r) {
-            $a[] = $r;
+            $container = new DbStorageContainer($this, $r);
+            
+            $a[] = $container;
         }
         return new \ArrayIterator($a);
     }

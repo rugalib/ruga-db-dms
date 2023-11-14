@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver;
 
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Row\RowInterface;
+use Ruga\Dms\Library\LibraryInterface;
 
 interface MetaDriverInterface
 {
@@ -25,7 +27,7 @@ interface MetaDriverInterface
     /**
      * Find meta storage containers by UUID.
      *
-     * @param array|string $uuid
+     * @param array|string|UuidInterface $uuid
      *
      * @return \ArrayIterator
      */
@@ -48,5 +50,14 @@ interface MetaDriverInterface
      * @return mixed
      */
     public function save();
+    
+    
+    
+    /**
+     * Return the library instance.
+     *
+     * @return LibraryInterface
+     */
+    public function getLibrary(): LibraryInterface;
     
 }

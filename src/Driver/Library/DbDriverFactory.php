@@ -23,8 +23,13 @@ class DbDriverFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
 //        $config = $container->get('config')[Dms::class][Library::CONFIG_LIBRARYSTORAGE] ?? [];
-        $dbadaptername = $options['adapter'] ?? $config['adapter'] ?? AdapterInterface::class;
-        $adapter = $container->get($dbadaptername);
+        
+        if (($options['adapter'] ?? '') instanceof AdapterInterface) {
+            $adapter = $options['adapter'];
+        } else {
+            $dbadaptername = $options['adapter'] ?? $config['adapter'] ?? AdapterInterface::class;
+            $adapter = $container->get($dbadaptername);
+        }
         return new DbDriver($adapter);
     }
 }

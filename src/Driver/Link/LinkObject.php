@@ -14,6 +14,7 @@ class LinkObject
     public string $foreignKey;
     public string $foreignUuid;
     public string $metaUuid;
+    public ?string $remark = null;
     
     
     

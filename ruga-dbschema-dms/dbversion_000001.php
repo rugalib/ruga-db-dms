@@ -14,7 +14,7 @@ declare(strict_types=1);
 $userTable = 'User';
 //$libraryTable = $resolver->getTableName(\Ruga\Dms\Model\LibraryTable::class);
 $libraryTable = 'DmsLibrary';
-$tableDocument = $resolver->getTableName(\Ruga\Dms\Model\DocumentTable::class);
+$documentTable = $resolver->getTableName(\Ruga\Dms\Model\DocumentTable::class);
 if ($document_type_values = implode("','", \Ruga\Dms\Document\DocumentType::getConstants())) {
     $document_type_values = "'{$document_type_values}'";
 }
@@ -22,7 +22,7 @@ if ($document_type_values = implode("','", \Ruga\Dms\Document\DocumentType::getC
 return /** @lang MySQL */
     <<<"SQL"
 SET FOREIGN_KEY_CHECKS = 0;
-CREATE TABLE `{$tableDocument}` (
+CREATE TABLE `{$documentTable}` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fullname` VARCHAR(255) DEFAULT NULL,
   `name` VARCHAR(255),
@@ -45,21 +45,21 @@ CREATE TABLE `{$tableDocument}` (
   `changedBy` INT DEFAULT '0',
 
   PRIMARY KEY (`id` ASC),
-  INDEX `{$tableDocument}_fullname_idx` (`fullname`),
-  UNIQUE INDEX `{$tableDocument}_datapath_UNIQUE` (`datapath`),
-  INDEX `{$tableDocument}_document_type_idx` (`document_type`),
-  INDEX `{$tableDocument}_priority_idx` (`priority`),
-  INDEX `{$tableDocument}_mimetype_idx` (`mimetype`),
-  INDEX `{$tableDocument}_name_idx` (`name`),
-  INDEX `{$tableDocument}_uuid_idx` (`uuid`),
-  INDEX `{$tableDocument}_filepath_idx` (`filename`),
-  INDEX `{$tableDocument}_library_idx` (`library`),
-  INDEX `{$tableDocument}_category_idx` (`category`),
+  INDEX `{$documentTable}_fullname_idx` (`fullname`),
+  UNIQUE INDEX `{$documentTable}_datapath_UNIQUE` (`datapath`),
+  INDEX `{$documentTable}_document_type_idx` (`document_type`),
+  INDEX `{$documentTable}_priority_idx` (`priority`),
+  INDEX `{$documentTable}_mimetype_idx` (`mimetype`),
+  INDEX `{$documentTable}_name_idx` (`name`),
+  INDEX `{$documentTable}_uuid_idx` (`uuid`),
+  INDEX `{$documentTable}_filepath_idx` (`filename`),
+  INDEX `{$documentTable}_library_idx` (`library`),
+  INDEX `{$documentTable}_category_idx` (`category`),
 
-  INDEX `fk_{$tableDocument}_changedBy_idx` (`changedBy`),
-  INDEX `fk_{$tableDocument}_createdBy_idx` (`createdBy`)
-  # CONSTRAINT `fk_{$tableDocument}_changedBy` FOREIGN KEY (`changedBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  # CONSTRAINT `fk_{$tableDocument}_createdBy` FOREIGN KEY (`createdBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  INDEX `fk_{$documentTable}_changedBy_idx` (`changedBy`),
+  INDEX `fk_{$documentTable}_createdBy_idx` (`createdBy`)
+  # CONSTRAINT `fk_{$documentTable}_changedBy` FOREIGN KEY (`changedBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  # CONSTRAINT `fk_{$documentTable}_createdBy` FOREIGN KEY (`createdBy`) REFERENCES `{$userTable}` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 )
 ENGINE = InnoDB
 ;

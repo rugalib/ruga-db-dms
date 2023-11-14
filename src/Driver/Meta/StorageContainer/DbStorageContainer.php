@@ -10,14 +10,16 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Row\AbstractRow;
 use Ruga\Db\Row\Exception\InvalidColumnException;
 use Ruga\Db\Row\Exception\NoDefaultValueException;
 use Ruga\Db\Row\RowInterface;
-use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
+use Ruga\Dms\MetaUuid;
+use Ruga\Dms\MetaUuidInterface;
 
 class DbStorageContainer extends AbstractStorageContainer implements MetaStorageContainerInterface
 {
@@ -136,9 +138,9 @@ class DbStorageContainer extends AbstractStorageContainer implements MetaStorage
     /**
      * @inheritDoc
      */
-    public function getUuid(): string
+    public function getUuid(): UuidInterface
     {
-        return $this->row->offsetGet('uuid');
+        return Uuid::fromString($this->row->offsetGet('uuid'));
     }
     
     

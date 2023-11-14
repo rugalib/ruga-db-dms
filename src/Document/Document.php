@@ -12,6 +12,7 @@ use Laminas\Db\RowGateway\AbstractRowGateway;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\StreamInterface;
+use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Row\RowInterface;
 use Ruga\Dms\Driver\DataStorageContainerDocumentInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
@@ -167,7 +168,7 @@ class Document extends AbstractDocument implements DocumentInterface
     /**
      * @inheritDoc
      */
-    public function getUuid(): string
+    public function getUuid(): UuidInterface
     {
         return $this->metaStorage->getUuid();
     }

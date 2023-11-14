@@ -6,17 +6,20 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver;
+
+use Ramsey\Uuid\UuidInterface;
 
 interface LinkDriverInterface
 {
     /**
      * Create a new storage object for link data.
      *
+     * @param UuidInterface $metaUuid
+     *
      * @return LinkStorageContainerInterface
      */
-    public function createStorage(): LinkStorageContainerInterface;
+    public function createStorage(UuidInterface $metaUuid): LinkStorageContainerInterface;
     
     
     

@@ -13,16 +13,19 @@ use Laminas\Json\Json;
 use Ruga\Dms\Driver\Meta\StorageContainer\MemoryStorageContainer;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
+use Ruga\Dms\Library\LibraryInterface;
 
-class FileDriver implements MetaDriverInterface
+class FileDriver extends AbstractDriver implements MetaDriverInterface
 {
     private string $filepath;
     private \SplObjectStorage $storage;
     
     
     
-    public function __construct(array $options=[])
+    public function __construct(LibraryInterface $library, array $options = [])
     {
+        parent::__construct($library);
+        
         $this->filepath = $options['filepath'] ?? null;
         $this->storage = new \SplObjectStorage();
     }
@@ -78,7 +81,7 @@ class FileDriver implements MetaDriverInterface
     {
         $a = [];
         /** @var MetaStorageContainerInterface $item */
-        foreach($this->storage as $item) {
+        foreach ($this->storage as $item) {
             $a[] = $item->toArray();
         }
         

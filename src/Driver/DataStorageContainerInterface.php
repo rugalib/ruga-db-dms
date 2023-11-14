@@ -44,10 +44,11 @@ interface DataStorageContainerInterface extends DataStorageContainerDocumentInte
     
     
     /**
-     * Return the unique id of the meta record.
-     * This Uuid is the same for the entire lifetime of the meta record.
+     * Return the unique id of the data record.
+     * This Uuid is the same for the entire lifetime of the data record.
      *
      * @return string
+     * @deprecated
      */
     public function getUuid(): string;
     

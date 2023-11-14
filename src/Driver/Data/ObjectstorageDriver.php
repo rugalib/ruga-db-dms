@@ -87,7 +87,7 @@ class ObjectstorageDriver implements DataDriverInterface
     public function getDataFilename(DataStorageContainerInterface $dataStorageContainer): string
     {
         $uuid = $dataStorageContainer->getDocument()->getMetaStorageContainer()->getUuid();
-        [$dirpart, $filepart] = explode('-', $uuid, 2);
+        [$dirpart, $filepart] = explode('-', $uuid->toString(), 2);
         return chunk_split($dirpart, 2, DIRECTORY_SEPARATOR) . $filepart;
     }
     
