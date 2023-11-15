@@ -92,7 +92,7 @@ abstract class AbstractStorageContainer implements LinkStorageContainerInterface
      *
      * @return string
      */
-    protected function keyFromMixed($key): string
+    public static function keyFromMixed($key): string
     {
         if (is_scalar($key)) {
             return strval($key);

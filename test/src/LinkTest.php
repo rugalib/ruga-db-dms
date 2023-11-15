@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Test;
 
+use PhpParser\Comment\Doc;
 use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\Data\ObjectstorageDriver;
@@ -81,7 +82,7 @@ class LinkTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
             Library::CONFIG_LINKSTORAGE => [
                 'driver' => \Ruga\Dms\Driver\Link\DbDriver::class,
                 'adapter' => $this->getAdapter(),
-            ]
+            ],
         ];
         
         /** @var LibraryInterface $library */
@@ -109,21 +110,21 @@ class LinkTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         $uuid = $document->getUuid();
         
         
-        
+        /** @var Document $doc2 */
         $doc2 = $library->findDocumentsByUuid($uuid)->current();
+        echo $doc2->getFilename() . ' ';
         echo $doc2->getMimetype();
         echo PHP_EOL;
         $this->assertSame('image/gif; charset=binary', $doc2->getMimetype());
         
         
+        /** @var Document $doc3 */
         $doc3 = $library->findDocumentsByForeignKey('6@BillTable')->current();
+        echo $doc3->getFilename() . ' ';
         echo $doc3->getMimetype();
         echo PHP_EOL;
-        $this->assertSame('image/jpeg; charset=binary', $doc2->getMimetype());
-        
-        
+        $this->assertSame('image/png; charset=binary', $doc3->getMimetype());
     }
-    
     
     
 }

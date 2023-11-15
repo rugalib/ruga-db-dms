@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Link;
 
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Adapter\AdapterInterface;
 use Ruga\Db\Table\AbstractTable;
@@ -16,6 +17,7 @@ use Ruga\Dms\Driver\Link\StorageContainer\DbStorageContainer;
 use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
+use Ruga\Dms\Model\Link;
 use Ruga\Dms\Model\LinkTable;
 
 class DbDriver implements LinkDriverInterface
@@ -53,7 +55,6 @@ class DbDriver implements LinkDriverInterface
         $container = new DbStorageContainer($this, $metaUuid, $this->table);
         $this->storage->attach($container);
         return $container;
-        
     }
     
     
@@ -73,8 +74,15 @@ class DbDriver implements LinkDriverInterface
      */
     public function findByForeignKey($key): \ArrayIterator
     {
-        $container = new DbStorageContainer($this, '', $this->table);
-        return $container->findByForeignKey($key);
+        $key = DbStorageContainer::keyFromMixed($key);
+        $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
+        $a = [];
+        /** @var Link $row */
+        foreach ($this->table->select(['Foreign_uuid' => $keyUuid]) as $row) {
+            $uuid = Uuid::fromString($row->offsetGet('Meta_uuid'));
+            $a[] = $this->createStorage($uuid);
+        }
+        return new \ArrayIterator($a);
     }
     
     
@@ -84,7 +92,7 @@ class DbDriver implements LinkDriverInterface
      */
     public function dumpConfig(): array
     {
-        $config=[];
+        $config = [];
         $config['driver'] = DbDriver::class;
         $config['table'] = $this->table->getTable();
         $config['adapter'] = get_class($this->table->getAdapter());

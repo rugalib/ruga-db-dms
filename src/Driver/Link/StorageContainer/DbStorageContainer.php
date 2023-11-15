@@ -36,7 +36,7 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
      */
     public function linkTo($key)
     {
-        $key = $this->keyFromMixed($key);
+        $key = static::keyFromMixed($key);
         $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
         $o = new LinkObject($key, $keyUuid, $this->getDocument()->getUuid()->toString());
         $this->links->attach($o);
@@ -49,7 +49,7 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
      */
     public function unlinkFrom($key)
     {
-        $key = $this->keyFromMixed($key);
+        $key = static::keyFromMixed($key);
         $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
         
         /** @var LinkObject $link */
@@ -68,7 +68,7 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
      */
     public function isLinkedTo($key): bool
     {
-        $key = $this->keyFromMixed($key);
+        $key = static::keyFromMixed($key);
         $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
         
         /** @var LinkObject $link */
@@ -123,18 +123,5 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
         $this->links->removeAll($this->links);
     }
     
-    
-    
-    public function findByForeignKey($key): \ArrayIterator
-    {
-        $key = $this->keyFromMixed($key);
-        $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
-        $a = [];
-        /** @var Link $row */
-        foreach ($this->table->select(['Foreign_uuid' => $keyUuid]) as $row) {
-            $a[] = $this->getLinkDriver()->createStorage();
-        }
-        return new \ArrayIterator($a);
-    }
     
 }
