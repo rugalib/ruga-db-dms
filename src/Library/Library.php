@@ -75,7 +75,7 @@ class Library extends AbstractLibrary implements LibraryInterface
         /** @var LinkStorageContainerInterface $linkStorageContainer */
         foreach ($linkStorageContainers as $linkStorageContainer) {
             $metaStorage = $this->metaDriver->findByUuid($linkStorageContainer->getMetaUuid())->current();
-            $dataStorage = $this->dataDriver->createStorage();
+            $dataStorage = $this->dataDriver->findByMetaStorage($metaStorage);
             new Document($this, $metaStorage, $dataStorage, $linkStorageContainer);
             $a[] = $linkStorageContainer->getDocument();
         }

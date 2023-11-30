@@ -38,7 +38,6 @@ class LinkTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         $filename = __DIR__ . '/../data/examples/Dinosaur Meme.jpg';
         $document->setContentFromFile($filename);
         
-        
         $document->linkTo('hallowelt');
         $document->save();
         

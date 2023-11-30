@@ -49,7 +49,10 @@ class ObjectstorageDriver implements DataDriverInterface
      */
     public function findByMetaStorage(MetaStorageContainerInterface $metaStorage): DataStorageContainerInterface
     {
-        return $metaStorage->getDocument()->getDataStorageContainer();
+        if($metaStorage->getDocument()) {
+            return $metaStorage->getDocument()->getDataStorageContainer();
+        }
+        return $this->createStorage();
     }
     
     
