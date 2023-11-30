@@ -10,6 +10,10 @@ namespace Ruga\Dms\Driver;
 
 use Ramsey\Uuid\UuidInterface;
 
+/**
+ * Interface for the link storage driver. The link storage driver manages containers that contain links between one
+ * DMS meta object and one or more external objects.
+ */
 interface LinkDriverInterface
 {
     /**

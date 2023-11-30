@@ -7,7 +7,13 @@
 declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Library;
-class MemoryDriver implements MemoryDriverInterface
+
+use Ruga\Dms\Driver\LibraryDriverInterface;
+
+/**
+ * Store the library in memory.
+ */
+class MemoryDriver implements LibraryDriverInterface
 {
     private string $name;
     
@@ -39,7 +45,7 @@ class MemoryDriver implements MemoryDriverInterface
     public function dumpConfig(): array
     {
         $config = [];
-        $config['driver'] = MemoryDriverInterface::class;
+        $config['driver'] = self::class;
         return $config;
     }
     
@@ -52,6 +58,7 @@ class MemoryDriver implements MemoryDriverInterface
     {
         // Not applicable
     }
+    
     
     
     /**

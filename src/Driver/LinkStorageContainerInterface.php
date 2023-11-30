@@ -6,13 +6,14 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver;
 
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentInterface;
-use Ruga\Dms\MetaUuid;
 
+/**
+ * Interface for a LinkStorageContainer. A LinkStorageContainer stores all the links for a DMS document.
+ */
 interface LinkStorageContainerInterface extends LinkStorageContainerDocumentInterface
 {
     /**

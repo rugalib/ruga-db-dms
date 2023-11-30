@@ -10,6 +10,9 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver;
 
 
+/**
+ * Interface for a library driver. Defines all necessary functions a library storage driver has to provide.
+ */
 interface LibraryDriverInterface
 {
     const ATTR_NAME = 'name';

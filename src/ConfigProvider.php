@@ -45,9 +45,9 @@ class ConfigProvider
                 'aliases' => [],
                 'factories' => [
                     Library\LibraryInterface::class => Library\LibraryFactory::class,
-                    Driver\Library\MemoryDriverInterface::class => Driver\Library\MemoryDriverFactory::class,
-                    Driver\Library\JsonFileDriverInterface::class => Driver\Library\JsonFileDriverFactory::class,
-                    Driver\Library\DbDriverInterface::class => Driver\Library\DbDriverFactory::class,
+                    Driver\Library\MemoryDriver::class => Driver\Library\MemoryDriverFactory::class,
+                    Driver\Library\JsonFileDriver::class => Driver\Library\JsonFileDriverFactory::class,
+                    Driver\Library\DbDriver::class => Driver\Library\DbDriverFactory::class,
                 ],
                 'invokables' => [],
                 'delegators' => [],

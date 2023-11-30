@@ -14,6 +14,9 @@ use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
+/**
+ * This data driver stores content in memory.
+ */
 class MemoryDriver implements DataDriverInterface
 {
     private array $storage = [];
@@ -55,11 +58,12 @@ class MemoryDriver implements DataDriverInterface
     
     
     /**
+     * Data is always stored im memory, save() makes no sense.
+     *
      * @inheritDoc
      */
     public function save()
     {
-        // Not applicable
     }
     
     

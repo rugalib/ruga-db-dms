@@ -11,6 +11,9 @@ namespace Ruga\Dms\Driver\Data\StorageContainer;
 use Ramsey\Uuid\Uuid;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 
+/**
+ * Store content data in memory.
+ */
 class MemoryStorageContainer extends AbstractStorageContainer implements DataStorageContainerInterface
 {
     private string $content;

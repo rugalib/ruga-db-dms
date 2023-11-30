@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Link\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
@@ -16,6 +15,11 @@ use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 
+/**
+ * This abstract storage container implements all common methods for the concrete storage containers.
+ * @see \Ruga\Dms\Driver\Link\StorageContainer\DbStorageContainer
+ * @see \Ruga\Dms\Driver\Link\StorageContainer\MemoryStorageContainer
+ */
 abstract class AbstractStorageContainer implements LinkStorageContainerInterface
 {
     private DocumentInterface $document;

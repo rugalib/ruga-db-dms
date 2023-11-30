@@ -18,6 +18,9 @@ use Ruga\Dms\Driver\MetaStorageContainerInterface;
 use Ruga\Dms\Library\LibraryInterface;
 use Ruga\Dms\Model\DocumentTable;
 
+/**
+ * Store meta data in database.
+ */
 class DbDriver extends AbstractDriver implements MetaDriverInterface
 {
     private AbstractTable $table;
@@ -101,7 +104,7 @@ class DbDriver extends AbstractDriver implements MetaDriverInterface
     {
         /** @var MetaStorageContainerInterface $item */
         foreach ($this->storage as $item) {
-            $a[] = $item->save();
+            $item->save();
         }
     }
     

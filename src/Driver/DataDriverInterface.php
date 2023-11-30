@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver;
 
 
+/**
+ * Manages content storage for library. Every DMS document is stored in a DataStorageContainer.
+ */
 interface DataDriverInterface
 {
     /**

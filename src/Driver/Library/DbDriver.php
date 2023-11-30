@@ -13,8 +13,12 @@ use Laminas\Db\RowGateway\RowGateway;
 use Laminas\Db\Sql\Sql;
 use Laminas\Json\Json;
 use Ruga\Db\Adapter\AdapterInterface;
+use Ruga\Dms\Driver\LibraryDriverInterface;
 
-class DbDriver implements DbDriverInterface
+/**
+ * Store the library in a database table.
+ */
+class DbDriver implements LibraryDriverInterface
 {
     private AdapterInterface $adapter;
     private AbstractRowGateway $row;
@@ -23,19 +27,19 @@ class DbDriver implements DbDriverInterface
     
     
     
-    public function __construct(AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter, string $tableName='DmsLibrary')
     {
         $this->adapter = $adapter;
         $this->name = 'name';
         
         $sql = new Sql($this->adapter);
         $select = $sql->select()
-            ->from('DmsLibrary')
+            ->from($tableName)
             ->where(['name' => $this->name]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();
         if (!$row = $result->current()) {
-            $row = new RowGateway('id', 'DmsLibrary', $this->adapter);
+            $row = new RowGateway('id', $tableName, $this->adapter);
         }
         $this->row = $row;
     }
@@ -69,7 +73,7 @@ class DbDriver implements DbDriverInterface
     public function dumpConfig(): array
     {
         $config = [];
-        $config['driver'] = DbDriverInterface::class;
+        $config['driver'] = self::class;
         return $config;
     }
     

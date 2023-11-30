@@ -13,6 +13,11 @@ use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 
+/**
+ * This abstract storage container implements all common methods for the concrete storage containers.
+ * @see \Ruga\Dms\Driver\Data\StorageContainer\FileStorageContainer
+ * @see \Ruga\Dms\Driver\Data\StorageContainer\MemoryStorageContainer
+ */
 abstract class AbstractStorageContainer implements DataStorageContainerInterface
 {
     private DocumentInterface $document;

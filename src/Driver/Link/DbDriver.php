@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Link;
 
 use Ramsey\Uuid\Uuid;
@@ -20,6 +19,9 @@ use Ruga\Dms\Driver\MetaStorageContainerInterface;
 use Ruga\Dms\Model\Link;
 use Ruga\Dms\Model\LinkTable;
 
+/**
+ * Stores links to other entities/object in a database.
+ */
 class DbDriver implements LinkDriverInterface
 {
     private \SplObjectStorage $storage;
@@ -106,6 +108,5 @@ class DbDriver implements LinkDriverInterface
      */
     public function save()
     {
-        // TODO: Implement save() method.
     }
 }

@@ -13,6 +13,11 @@ use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
+/**
+ * This data driver stores files in the filesystem under a given basepath using an object id. Filenames are only stored
+ * in meta data and used for searching and information. Everything under basepath is exclusively managed by the
+ * ObjectstorageDriver.
+ */
 class ObjectstorageDriver implements DataDriverInterface
 {
     private \SplObjectStorage $storage;
@@ -23,11 +28,18 @@ class ObjectstorageDriver implements DataDriverInterface
     public function __construct(array $options = [])
     {
         $this->storage = new \SplObjectStorage();
+        
         $basepath = rtrim($options['basepath'] ?? '', " \t\n\r\0\x0B\\/");
-        $basepath = realpath($basepath);
-        if ($basepath !== false) {
-            $this->basepath = $basepath;
+        if (empty($basepath)) {
+            throw new \InvalidArgumentException("'basepath' is missing or empty");
         }
+        
+        $basepath = realpath($basepath);
+        if ($basepath === false) {
+            throw new \InvalidArgumentException("'basepath' '{$basepath}' is not valid.");
+        }
+        
+        $this->basepath = $basepath;
     }
     
     
@@ -49,7 +61,7 @@ class ObjectstorageDriver implements DataDriverInterface
      */
     public function findByMetaStorage(MetaStorageContainerInterface $metaStorage): DataStorageContainerInterface
     {
-        if($metaStorage->getDocument()) {
+        if ($metaStorage->getDocument()) {
             return $metaStorage->getDocument()->getDataStorageContainer();
         }
         return $this->createStorage();
@@ -71,15 +83,22 @@ class ObjectstorageDriver implements DataDriverInterface
     
     
     /**
+     * FilesystemDriver does not need a save() method.
+     *
      * @inheritDoc
+     *
      */
     public function save()
     {
-        // TODO: Implement save() method.
     }
     
     
     
+    /**
+     * Return the basepath.
+     *
+     * @return string
+     */
     public function getBasepath(): string
     {
         return $this->basepath;
@@ -87,6 +106,14 @@ class ObjectstorageDriver implements DataDriverInterface
     
     
     
+    /**
+     * Return the filename and path for the data file in the filesystem. Uses the meta UUID to create a path and
+     * filename.
+     *
+     * @param DataStorageContainerInterface $dataStorageContainer
+     *
+     * @return string
+     */
     public function getDataFilename(DataStorageContainerInterface $dataStorageContainer): string
     {
         $uuid = $dataStorageContainer->getDocument()->getMetaStorageContainer()->getUuid();
@@ -96,6 +123,14 @@ class ObjectstorageDriver implements DataDriverInterface
     
     
     
+    /**
+     * Set the filename and path for the data file in the filesystem.
+     *
+     * @param DataStorageContainerInterface $dataStorageContainer
+     * @param                               $dataFilename
+     *
+     * @return void
+     */
     public function setDataFilename(DataStorageContainerInterface $dataStorageContainer, $dataFilename)
     {
         $dataStorageContainer->getDocument()->getMetaStorageContainer()->setDataUniqueKey(

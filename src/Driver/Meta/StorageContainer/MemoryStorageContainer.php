@@ -6,15 +6,16 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
-use Ruga\Dms\MetaUuid;
 
+/**
+ * Store meta data for a DMS document in memory.
+ */
 class MemoryStorageContainer extends AbstractStorageContainer implements MetaStorageContainerInterface
 {
     private string $name;

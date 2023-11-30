@@ -13,6 +13,9 @@ use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 use Ruga\Dms\Library\LibraryInterface;
 
+/**
+ * Implement the common methods for a MetaDriver.
+ */
 abstract class AbstractDriver implements MetaDriverInterface
 {
     private LibraryInterface $library;

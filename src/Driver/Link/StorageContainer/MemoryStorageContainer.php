@@ -14,6 +14,9 @@ use Ruga\Db\Row\AbstractRugaRow;
 use Ruga\Dms\Driver\Link\LinkObject;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 
+/**
+ * Store links for a DMS document in memory.
+ */
 class MemoryStorageContainer extends AbstractStorageContainer implements LinkStorageContainerInterface
 {
     

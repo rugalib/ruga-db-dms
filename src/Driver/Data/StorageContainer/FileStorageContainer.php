@@ -12,10 +12,21 @@ use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 
+/**
+ * Store content data in a file on a filesystem.
+ *
+ * @see \Ruga\Dms\Driver\Data\FilesystemDriver
+ * @see \Ruga\Dms\Driver\Data\ObjectstorageDriver
+ */
 class FileStorageContainer extends AbstractStorageContainer implements DataStorageContainerInterface
 {
     
-    
+    /**
+     * Get content file name from the driver. Depending on the driver, this can be a "real" (meaningful for
+     * humans and other systems) filename or an encoded path for object storage.
+     *
+     * @return string
+     */
     private function getDataFilename(): string
     {
         return $this->getDataDriver()->getDataFilename($this);
@@ -23,6 +34,13 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
     
     
     
+    /**
+     * Set the content file name. Is called by self::setContent() after content has been written to the filesystem.
+     *
+     * @param string $filename
+     *
+     * @return void
+     */
     private function setDataFilename(string $filename)
     {
         $this->getDataDriver()->setDataFilename($this, $filename);
@@ -30,6 +48,13 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
     
     
     
+    /**
+     * Build an absolute path by using the basepath from driver and the given filename.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
     private function buildFilepath(string $filename): string
     {
         $basepath = $this->getDataDriver()->getBasepath();
@@ -38,6 +63,14 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
     
     
     
+    /**
+     * Prepare the content file for storage.
+     * Creates the directory structure and "touches" the content file.
+     *
+     * @param string $filepath
+     *
+     * @return string
+     */
     private function prepareFilepath(string $filepath): string
     {
         if (!is_dir(dirname($filepath))) {
@@ -49,6 +82,13 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
     
     
     
+    /**
+     * Return true, if the content file exists.
+     *
+     * @param string|null $filename
+     *
+     * @return bool
+     */
     private function fileExists(?string $filename = null): bool
     {
         if ($filename === null) {
@@ -97,6 +137,9 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
      */
     public function getContentLength(): int
     {
+        if (!$this->fileExists()) {
+            return 0;
+        }
         $filename = $this->getDataFilename();
         return filesize($this->buildFilepath($filename));
     }
@@ -104,11 +147,12 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
     
     
     /**
+     * FileStorageContainer does not need a save() method, because content is immediately saved to the file.
+     *
      * @inheritDoc
      */
     public function save()
     {
-        // TODO: Implement save() method.
     }
     
     

@@ -12,6 +12,9 @@ use Ruga\Dms\Driver\LibraryDriverInterface;
 use Ruga\Dms\Library\Library;
 use Ruga\Dms\Library\LibraryInterface;
 
+/**
+ * The main class is actually only used for naming.
+ */
 class Dms
 {
     /**

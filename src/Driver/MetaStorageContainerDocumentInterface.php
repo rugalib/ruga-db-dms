@@ -11,6 +11,10 @@ namespace Ruga\Dms\Driver;
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Dms\Document\DocumentType;
 
+/**
+ * Interface for a MetaStorageContainer. A MetaStorageContainer stores meta data for a DMS document.
+ * Methods in this interface are also present in the document interface.
+ */
 interface MetaStorageContainerDocumentInterface
 {
     

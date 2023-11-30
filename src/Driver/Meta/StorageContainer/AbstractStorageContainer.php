@@ -8,11 +8,15 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Meta\StorageContainer;
 
-use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
+/**
+ * This abstract storage container implements all common methods for the concrete storage containers.
+ * @see \Ruga\Dms\Driver\Meta\StorageContainer\DbStorageContainer
+ * @see \Ruga\Dms\Driver\Meta\StorageContainer\MemoryStorageContainer
+ */
 abstract class AbstractStorageContainer implements MetaStorageContainerInterface
 {
     private DocumentInterface $document;

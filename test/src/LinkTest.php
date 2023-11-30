@@ -8,13 +8,9 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Test;
 
-use PhpParser\Comment\Doc;
 use Ruga\Dms\Document\Document;
 use Ruga\Dms\Document\DocumentType;
 use Ruga\Dms\Driver\Data\ObjectstorageDriver;
-use Ruga\Dms\Driver\Library\DbDriverInterface;
-use Ruga\Dms\Driver\Library\JsonFileDriverInterface;
-use Ruga\Dms\Driver\Meta\DbDriver;
 use Ruga\Dms\Library\Library;
 use Ruga\Dms\Library\LibraryInterface;
 
@@ -67,11 +63,11 @@ class LinkTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         $config = [
             'name' => 'Customized Library',
             Library::CONFIG_LIBRARYSTORAGE => [
-                'driver' => DbDriverInterface::class,
+                'driver' => \Ruga\Dms\Driver\Library\DbDriver::class,
                 'adapter' => $this->getAdapter(),
             ],
             Library::CONFIG_METASTORAGE => [
-                'driver' => DbDriver::class,
+                'driver' => \Ruga\Dms\Driver\Meta\DbDriver::class,
                 'adapter' => $this->getAdapter(),
             ],
             Library::CONFIG_DATASTORAGE => [

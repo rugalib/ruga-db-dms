@@ -11,6 +11,10 @@ namespace Ruga\Dms\Driver;
 
 use Ruga\Db\Row\RowInterface;
 
+/**
+ * Interface for a LinkStorageContainer. A LinkStorageContainer stores all the links for a DMS document.
+ * Methods in this interface are also present in the document interface.
+ */
 interface LinkStorageContainerDocumentInterface
 {
     

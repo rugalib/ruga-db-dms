@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Meta;
 
 use Laminas\Json\Json;
@@ -15,6 +14,10 @@ use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 use Ruga\Dms\Library\LibraryInterface;
 
+/**
+ * Store meta data in one file. This drivers uses MemoryStorageContainer to store the data and saves it to a file, if
+ * save() is called.
+ */
 class FileDriver extends AbstractDriver implements MetaDriverInterface
 {
     private string $filepath;

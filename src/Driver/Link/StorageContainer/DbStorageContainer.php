@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Link\StorageContainer;
 
 use Ramsey\Uuid\Uuid;
@@ -17,6 +16,9 @@ use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Model\Link;
 
+/**
+ * Store links for a DMS document in a database.
+ */
 class DbStorageContainer extends AbstractStorageContainer implements LinkStorageContainerInterface
 {
     private AbstractTable $table;
@@ -110,7 +112,6 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
      */
     public function rename(string $newname)
     {
-        // TODO: Implement rename() method.
     }
     
     

@@ -9,9 +9,12 @@ declare(strict_types=1);
 namespace Ruga\Dms\Driver;
 
 use Ramsey\Uuid\UuidInterface;
-use Ruga\Db\Row\RowInterface;
 use Ruga\Dms\Library\LibraryInterface;
 
+/**
+ * Interface for the meta storage driver. The meta storage driver manages containers that contain meta information
+ * about a DMS document.
+ */
 interface MetaDriverInterface
 {
     

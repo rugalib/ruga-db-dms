@@ -10,6 +10,10 @@ namespace Ruga\Dms\Driver;
 
 use Ruga\Dms\Document\DocumentInterface;
 
+/**
+ * Interface for a DataStorageContainer. A DataStorageContainer stores the content per DMS document.
+ * Methods in this interface are also present in the document interface.
+ */
 interface DataStorageContainerDocumentInterface
 {
     

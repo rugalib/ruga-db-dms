@@ -12,6 +12,9 @@ use Ruga\Db\Row\RowInterface;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Document\DocumentType;
 
+/**
+ * Interface for a MetaStorageContainer. A MetaStorageContainer stores meta data for a DMS document.
+ */
 interface MetaStorageContainerInterface extends MetaStorageContainerDocumentInterface
 {
     /**

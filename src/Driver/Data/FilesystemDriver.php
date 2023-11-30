@@ -13,6 +13,11 @@ use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
+/**
+ * This data driver stores files in the filesystem under a given base path using their real filename. If content is
+ * added via \Ruga\Dms\Document\Document::setContentFromFile(), the filename (without path) is automatically used. Use
+ * \Ruga\Dms\Document\Document::setFilename() to set a custom filename.
+ */
 class FilesystemDriver implements DataDriverInterface
 {
     private \SplObjectStorage $storage;
@@ -23,11 +28,18 @@ class FilesystemDriver implements DataDriverInterface
     public function __construct(array $options = [])
     {
         $this->storage = new \SplObjectStorage();
+        
         $basepath = rtrim($options['basepath'] ?? '', " \t\n\r\0\x0B\\/");
-        $basepath = realpath($basepath);
-        if ($basepath !== false) {
-            $this->basepath = $basepath;
+        if (empty($basepath)) {
+            throw new \InvalidArgumentException("'basepath' is missing or empty");
         }
+        
+        $basepath = realpath($basepath);
+        if ($basepath === false) {
+            throw new \InvalidArgumentException("'basepath' '{$basepath}' is not valid.");
+        }
+        
+        $this->basepath = $basepath;
     }
     
     
@@ -49,7 +61,10 @@ class FilesystemDriver implements DataDriverInterface
      */
     public function findByMetaStorage(MetaStorageContainerInterface $metaStorage): DataStorageContainerInterface
     {
-        return $metaStorage->getDocument()->getDataStorageContainer();
+        if ($metaStorage->getDocument()) {
+            return $metaStorage->getDocument()->getDataStorageContainer();
+        }
+        return $this->createStorage();
     }
     
     
@@ -68,15 +83,22 @@ class FilesystemDriver implements DataDriverInterface
     
     
     /**
+     * FilesystemDriver does not need a save() method.
+     *
      * @inheritDoc
+     *
      */
     public function save()
     {
-        // TODO: Implement save() method.
     }
     
     
     
+    /**
+     * Return the basepath.
+     *
+     * @return string
+     */
     public function getBasepath(): string
     {
         return $this->basepath;
@@ -84,6 +106,15 @@ class FilesystemDriver implements DataDriverInterface
     
     
     
+    /**
+     * Return the filename and path for the data file in the filesystem. First tries to read the path from
+     * DataUniqueKey, which is actually the primary source for this information. If there is no DataUniqueKey, fall
+     * back to the filename. If even a filename is not set, return an empty string.
+     *
+     * @param DataStorageContainerInterface $dataStorageContainer
+     *
+     * @return string
+     */
     public function getDataFilename(DataStorageContainerInterface $dataStorageContainer): string
     {
         return $dataStorageContainer->getDocument()->getMetaStorageContainer()->getDataUniqueKey()
@@ -93,6 +124,14 @@ class FilesystemDriver implements DataDriverInterface
     
     
     
+    /**
+     * Set the filename and path for the data file in the filesystem.
+     *
+     * @param DataStorageContainerInterface $dataStorageContainer
+     * @param                               $dataFilename
+     *
+     * @return void
+     */
     public function setDataFilename(DataStorageContainerInterface $dataStorageContainer, $dataFilename)
     {
         $dataStorageContainer->getDocument()->getMetaStorageContainer()->setDataUniqueKey($dataFilename);

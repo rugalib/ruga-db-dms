@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Test;
 
-use Ruga\Dms\Driver\Library\DbDriverInterface;
-use Ruga\Dms\Driver\Library\JsonFileDriverInterface;
+use Ruga\Dms\Driver\Library\DbDriver;
+use Ruga\Dms\Driver\Library\JsonFileDriver;
 use Ruga\Dms\Library\Library;
 use Ruga\Dms\Library\LibraryInterface;
 
@@ -33,7 +33,7 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         $config = [
             'name' => 'Customized Library',
             Library::CONFIG_LIBRARYSTORAGE => [
-                'driver' => JsonFileDriverInterface::class,
+                'driver' => JsonFileDriver::class,
                 'filepath' => __DIR__ . '/../data/libraries/lib1.json',
             ],
 //            Library::CONFIG_METASTORAGE => [
@@ -59,7 +59,7 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         $config = [
             'name' => 'Customized Library',
             Library::CONFIG_LIBRARYSTORAGE => [
-                'driver' => DbDriverInterface::class,
+                'driver' => DbDriver::class,
             ],
 //            Library::CONFIG_METASTORAGE => [
 //                'driver' => 'db',

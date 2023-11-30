@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Link;
 
 use Ramsey\Uuid\UuidInterface;
@@ -14,8 +13,10 @@ use Ruga\Dms\Driver\Link\StorageContainer\MemoryStorageContainer;
 use Ruga\Dms\Driver\LinkDriverInterface;
 use Ruga\Dms\Driver\LinkStorageContainerInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
-use Ruga\Dms\MetaUuid;
 
+/**
+ * Stores links to other entities/object in memory.
+ */
 class MemoryDriver implements LinkDriverInterface
 {
     private \SplObjectStorage $storage;

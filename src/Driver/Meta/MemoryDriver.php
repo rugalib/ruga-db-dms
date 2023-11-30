@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-
 namespace Ruga\Dms\Driver\Meta;
 
 use Ramsey\Uuid\UuidInterface;
@@ -14,6 +13,9 @@ use Ruga\Dms\Driver\Meta\StorageContainer\MemoryStorageContainer;
 use Ruga\Dms\Driver\MetaDriverInterface;
 use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
+/**
+ * Store meta data in memory.
+ */
 class MemoryDriver extends AbstractDriver implements MetaDriverInterface
 {
     private array $storage = [];
