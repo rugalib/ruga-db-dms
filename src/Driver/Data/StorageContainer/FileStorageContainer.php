@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Data\StorageContainer;
 
+use Laminas\Diactoros\Stream;
 use Ruga\Dms\Document\DocumentInterface;
 use Ruga\Dms\Driver\DataDriverInterface;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
@@ -121,6 +122,39 @@ class FileStorageContainer extends AbstractStorageContainer implements DataStora
         // Hash changed => persist new content to the data backend
         if ($newhash != $metaStorage->getHash()) {
             file_put_contents($this->prepareFilepath($this->buildFilepath($filename)), $data);
+            $this->setDataFilename($filename);
+            $metaStorage->setHash($newhash);
+            $lastModified = $lastModified ?? (new \DateTimeImmutable());
+            $metaStorage->setLastModified($lastModified);
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function setStreamContent(Stream $dataStream, ?\DateTimeImmutable $lastModified = null): bool
+    {
+        $metaStorage = $this->getDocument()->getMetaStorageContainer();
+        $filename = $this->getDataFilename();
+        
+        // If stream is not a file, store contents to a temp file
+        if ($dataStream->getMetadata()['wrapper_type'] === 'file://') {
+            $tmpfilename = $dataStream->getMetadata()['uri'];
+        } else {
+            $tmpfile = tmpfile();
+            stream_copy_to_stream($dataStream->detach(), $tmpfile);
+            $tmpfilename = stream_get_meta_data($tmpfile)['uri'];
+        }
+        
+        $newhash = $metaStorage->calcualteFileHash($tmpfilename);
+        // Hash changed => persist new content to the data backend
+        if ($newhash != $metaStorage->getHash()) {
+//            file_put_contents($this->prepareFilepath($this->buildFilepath($filename)), $data);
+            copy($tmpfilename, $this->prepareFilepath($this->buildFilepath($filename)));
             $this->setDataFilename($filename);
             $metaStorage->setHash($newhash);
             $lastModified = $lastModified ?? (new \DateTimeImmutable());

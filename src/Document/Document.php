@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ruga\Dms\Document;
 
 use Laminas\Db\RowGateway\AbstractRowGateway;
+use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\StreamInterface;
@@ -226,6 +227,36 @@ class Document extends AbstractDocument implements DocumentInterface
     
     
     /**
+     * @inheritdoc
+     */
+    public function setStreamContent(Stream $dataStream, ?\DateTimeImmutable $lastModified = null): bool
+    {
+        $lastModified = $lastModified ?? (new \DateTimeImmutable());
+        try {
+            // Determine mime type and store in meta backend
+            $content = $dataStream->read(1000);
+            $dataStream->rewind();
+            $finfo = new \finfo(FILEINFO_MIME);
+            $this->metaStorage->setMimetype($finfo->buffer($content));
+            
+            // Use the name (self::getName()) as filename if no filename is set
+            if (!$this->getFilename()) {
+                $path_parts = pathinfo($this->getName());
+                
+                $path_parts['extension'] = $path_parts['extension'] ?? $this->getExtensionFromMimetype();
+                $name = implode('.', array_filter([$path_parts['filename'], $path_parts['extension']]));
+                
+                $this->setFilename($name);
+            }
+            return $this->dataStorage->setStreamContent($dataStream, $lastModified);
+        } finally {
+            $this->save();
+        }
+    }
+    
+    
+    
+    /**
      * Saves the content to the given filename.
      *
      * @param string $file
@@ -235,7 +266,7 @@ class Document extends AbstractDocument implements DocumentInterface
     public function getContentToFile(string $file): bool
     {
         if (file_exists($file)) {
-            throw new FileAlreadyExistsException("The file '{$file}' already exists");
+            throw new \RuntimeException("The file '{$file}' already exists");
         }
         return file_put_contents($file, $this->getContent()) !== false;
     }
@@ -281,7 +312,7 @@ class Document extends AbstractDocument implements DocumentInterface
         
         try {
             $lastModified = \DateTimeImmutable::createFromFormat('U', strval(filemtime($fn)));
-            return $this->setContent(file_get_contents($fn), $lastModified);
+            return $this->setStreamContent(new Stream($fn), $lastModified);
         } finally {
             if ($deleteFileAfterImport) {
                 unlink($fn);

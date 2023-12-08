@@ -90,9 +90,20 @@ interface MetaStorageContainerInterface extends MetaStorageContainerDocumentInte
      *
      * @param string $data
      *
-     * @return mixed
+     * @return string
      */
-    public function calculateHash(string $data);
+    public function calculateHash(string $data): string;
+    
+    
+    
+    /**
+     * Calculate the hash of the given file.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    public function calcualteFileHash(string $filename): string;
     
     
     

@@ -14,6 +14,7 @@ use Ruga\Dms\Driver\MetaStorageContainerInterface;
 
 /**
  * This abstract storage container implements all common methods for the concrete storage containers.
+ *
  * @see \Ruga\Dms\Driver\Meta\StorageContainer\DbStorageContainer
  * @see \Ruga\Dms\Driver\Meta\StorageContainer\MemoryStorageContainer
  */
@@ -64,9 +65,19 @@ abstract class AbstractStorageContainer implements MetaStorageContainerInterface
     /**
      * @inheritDoc
      */
-    public function calculateHash(string $data)
+    public function calculateHash(string $data): string
     {
         return hash('sha256', $data);
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function calcualteFileHash(string $filename): string
+    {
+        return hash_file('sha256', $filename);
     }
     
     

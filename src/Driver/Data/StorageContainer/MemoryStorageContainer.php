@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Data\StorageContainer;
 
-use Ramsey\Uuid\Uuid;
+use Laminas\Diactoros\Stream;
 use Ruga\Dms\Driver\DataStorageContainerInterface;
 
 /**
@@ -52,6 +52,27 @@ class MemoryStorageContainer extends AbstractStorageContainer implements DataSto
         // Hash changed => persist new content to the data backend
         if ($newhash != $metaStorage->getHash()) {
             $this->content = $data;
+            $metaStorage->setHash($newhash);
+            $lastModified = $lastModified ?? (new \DateTimeImmutable());
+            $metaStorage->setLastModified($lastModified);
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function setStreamContent(Stream $dataStream, ?\DateTimeImmutable $lastModified = null): bool
+    {
+        $metaStorage = $this->getDocument()->getMetaStorageContainer();
+        $content = $dataStream->getContents();
+        $newhash = $metaStorage->calculateHash($content);
+        // Hash changed => persist new content to the data backend
+        if ($newhash != $metaStorage->getHash()) {
+            $this->content = $content;
             $metaStorage->setHash($newhash);
             $lastModified = $lastModified ?? (new \DateTimeImmutable());
             $metaStorage->setLastModified($lastModified);

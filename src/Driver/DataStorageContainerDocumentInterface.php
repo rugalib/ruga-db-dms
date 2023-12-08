@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver;
 
+use Laminas\Diactoros\Stream;
 use Ruga\Dms\Document\DocumentInterface;
 
 /**
@@ -36,7 +37,21 @@ interface DataStorageContainerDocumentInterface
      *
      * @return bool True if document has changed
      */
-    public function setContent(string $data, ?\DateTimeImmutable $lastModified=null): bool;
+    public function setContent(string $data, ?\DateTimeImmutable $lastModified = null): bool;
+    
+    
+    
+    /**
+     * Send content to the data backend of the document.
+     * Calls save() on meta and data backend.
+     * Returns true if the file content has changed.
+     *
+     * @param Stream                  $dataStream
+     * @param \DateTimeImmutable|null $lastModified
+     *
+     * @return bool True if document has changed
+     */
+    public function setStreamContent(Stream $dataStream, ?\DateTimeImmutable $lastModified = null): bool;
     
     
     
