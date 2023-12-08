@@ -17,6 +17,10 @@ use Ruga\Dms\Library\LibraryInterface;
  */
 class Dms
 {
+    const CONF_LIBRARY_MANAGER = 'libraries';
+    
+    
+    
     /**
      * @param LibraryDriverInterface $libraryAdapter
      * @param array                  $config
@@ -28,4 +32,5 @@ class Dms
     {
         return new Library($libraryAdapter, $config);
     }
+    
 }

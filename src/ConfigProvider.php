@@ -21,6 +21,9 @@ class ConfigProvider
     {
         return [
             Dms::class => [
+                Dms::CONF_LIBRARY_MANAGER => [
+                
+                ],
                 'default' => [
                     'name' => 'Default library',
                 ],
@@ -44,6 +47,7 @@ class ConfigProvider
                 'services' => [],
                 'aliases' => [],
                 'factories' => [
+                    Library\LibraryManager::class => Library\LibraryManagerFactory::class,
                     Library\LibraryInterface::class => Library\LibraryFactory::class,
                     Driver\Library\MemoryDriver::class => Driver\Library\MemoryDriverFactory::class,
                     Driver\Library\JsonFileDriver::class => Driver\Library\JsonFileDriverFactory::class,
