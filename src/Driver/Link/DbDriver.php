@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Link;
 
+use Laminas\Db\Sql\Where;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Adapter\AdapterInterface;
@@ -79,8 +80,17 @@ class DbDriver implements LinkDriverInterface
         $key = DbStorageContainer::keyFromMixed($key);
         $keyUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $key)))->toString();
         $a = [];
+        
+        $select = $this->table->getSql()->select();
+        $select->where(function (Where $where) use ($key, $keyUuid) {
+            $where->NEST->isNotNull('Foreign_uuid')->AND->equalTo('Foreign_uuid', $keyUuid)->UNNEST;
+            $where->OR;
+            $where->NEST->isNull('Foreign_uuid')->AND->equalTo('Foreign_key', $key)->UNNEST;
+        });
+        \Ruga\Log::addLog("SQL={$select->getSqlString($this->table->getAdapter()->getPlatform())}");
+        
         /** @var Link $row */
-        foreach ($this->table->select(['Foreign_uuid' => $keyUuid]) as $row) {
+        foreach ($this->table->selectWith($select) as $row) {
             $uuid = Uuid::fromString($row->offsetGet('Meta_uuid'));
             $a[] = $this->createStorage($uuid);
         }

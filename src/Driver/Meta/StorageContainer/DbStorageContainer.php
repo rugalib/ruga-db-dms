@@ -110,7 +110,8 @@ class DbStorageContainer extends AbstractStorageContainer implements MetaStorage
      */
     public function getMimetype(): string
     {
-        return $this->row->offsetGet('mimetype');
+        $mimetype = $this->row->offsetGet('mimetype');
+        return empty($mimetype) ? 'application/octet-stream' : $mimetype;
     }
     
     

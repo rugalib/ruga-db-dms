@@ -47,6 +47,7 @@ class ConfigProvider
                 'services' => [],
                 'aliases' => [],
                 'factories' => [
+                    Middleware\DmsMiddleware::class => Middleware\DmsMiddlewareFactory::class,
                     Library\LibraryManager::class => Library\LibraryManagerFactory::class,
                     Library\LibraryInterface::class => Library\LibraryFactory::class,
                     Driver\Library\MemoryDriver::class => Driver\Library\MemoryDriverFactory::class,

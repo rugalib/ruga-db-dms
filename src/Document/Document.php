@@ -8,19 +8,11 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Document;
 
-use Laminas\Db\RowGateway\AbstractRowGateway;
 use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\StreamInterface;
 use Ramsey\Uuid\UuidInterface;
-use Ruga\Db\Row\RowInterface;
-use Ruga\Dms\Driver\DataStorageContainerDocumentInterface;
-use Ruga\Dms\Driver\DataStorageContainerInterface;
-use Ruga\Dms\Driver\MetaStorageContainerDocumentInterface;
-use Ruga\Dms\Driver\MetaStorageContainerInterface;
-use Ruga\Dms\Library\AbstractLibrary;
-use Ruga\Dms\Library\LibraryInterface;
 
 /**
  * Implementation of a document in the DMS library. This is a common place of access for the developer, using the DMS.
@@ -429,6 +421,7 @@ class Document extends AbstractDocument implements DocumentInterface
                     [
                         $basePath,
                         'ruga-db-dms',
+                        $this->library->getName(),
                         'download',
                         "{$this->getUuid()}",
                         "{$this->getFilename()}",

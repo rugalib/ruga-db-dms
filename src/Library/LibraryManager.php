@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ruga\Dms\Library;
 
 use Psr\Container\ContainerInterface;
+use Ruga\Dms\Library\Exception\InvalidLibarayNameException;
 
 class LibraryManager
 {
@@ -29,7 +30,7 @@ class LibraryManager
     public function createLibraryFromName(string $name)
     {
         if (!array_key_exists($name, $this->config)) {
-            throw new \InvalidArgumentException("Library with name '{$name}' does not exist in configuration");
+            throw new InvalidLibarayNameException("Library with name '{$name}' does not exist in configuration");
         }
         
         $config = $this->config[$name];

@@ -56,7 +56,11 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
         
         /** @var LinkObject $link */
         foreach ($this->links as $link) {
-            if ($link->foreignUuid === $keyUuid) {
+            if (!empty($link->foreignUuid) && ($link->foreignUuid === $keyUuid)) {
+                $this->links->offsetUnset($link);
+                break;
+            }
+            if (empty($link->foreignUuid) && ($link->foreignkey === $key)) {
                 $this->links->offsetUnset($link);
                 break;
             }
@@ -75,7 +79,10 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
         
         /** @var LinkObject $link */
         foreach ($this->links as $link) {
-            if ($link->foreignUuid === $keyUuid) {
+            if (!empty($link->foreignUuid) && ($link->foreignUuid === $keyUuid)) {
+                return true;
+            }
+            if (empty($link->foreignUuid) && ($link->foreignkey === $key)) {
                 return true;
             }
         }
