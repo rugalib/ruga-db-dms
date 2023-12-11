@@ -85,6 +85,26 @@ abstract class AbstractLibrary implements LibraryInterface
     /**
      * @inheritdoc
      */
+    public function getRemark(): string
+    {
+        return $this->libraryDriver->getRemark();
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
+    public function setRemark(string $name)
+    {
+        $this->libraryDriver->setRemark($name);
+    }
+    
+    
+    
+    /**
+     * @inheritdoc
+     */
     public function save()
     {
 //        $this->dataDriver->save();
@@ -103,7 +123,7 @@ abstract class AbstractLibrary implements LibraryInterface
      */
     public function dumpConfig(): array
     {
-        $config = ['name' => $this->getName()];
+        $config = [LibraryDriverInterface::ATTR_NAME => $this->getName()];
         $config[Library::CONFIG_LIBRARYSTORAGE] = $this->libraryDriver->dumpConfig();
         $config[Library::CONFIG_METASTORAGE] = $this->metaDriver->dumpConfig();
         $config[Library::CONFIG_DATASTORAGE] = $this->dataDriver->dumpConfig();

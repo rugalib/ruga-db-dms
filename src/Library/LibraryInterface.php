@@ -37,6 +37,24 @@ interface LibraryInterface
     
     
     /**
+     * Return the remark of the library.
+     *
+     * @return string
+     */
+    public function getRemark(): string;
+    
+    
+    
+    /**
+     * Set the remark of the library.
+     *
+     * @param string $remark
+     */
+    public function setRemark(string $remark);
+    
+    
+    
+    /**
      * Dump the current config.
      *
      * @return array

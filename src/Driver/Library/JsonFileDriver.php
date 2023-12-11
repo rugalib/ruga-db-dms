@@ -42,7 +42,14 @@ class JsonFileDriver implements LibraryDriverInterface
     
     
     
-    public function __construct(string $filepath)
+    /**
+     * Construct a new instance of the class.
+     *
+     * @param string $filepath The path to the JSON file.
+     *
+     * @return void
+     */
+    public function __construct(string $filepath, array $options = [])
     {
         $this->filepath = $filepath;
         $this->readFileIntoVar();
@@ -84,7 +91,7 @@ class JsonFileDriver implements LibraryDriverInterface
     public function getName(): string
     {
         $this->readFileIntoVar();
-        return $this->data[self::ATTR_NAME];
+        return $this->data[self::ATTR_NAME] ?? '';
     }
     
     
@@ -96,6 +103,29 @@ class JsonFileDriver implements LibraryDriverInterface
     {
         $this->readFileIntoVar();
         $this->data[self::ATTR_NAME] = $name;
+        $this->saveVarInFile();
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRemark(): string
+    {
+        $this->readFileIntoVar();
+        return $this->data[self::ATTR_REMARK] ?? '';
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function setRemark(string $remark)
+    {
+        $this->readFileIntoVar();
+        $this->data[self::ATTR_REMARK] = $remark;
         $this->saveVarInFile();
     }
     

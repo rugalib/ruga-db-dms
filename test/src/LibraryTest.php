@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Test;
 
+use Psr\Container\ContainerExceptionInterface;
 use Ruga\Dms\Driver\Library\DbDriver;
 use Ruga\Dms\Driver\Library\JsonFileDriver;
 use Ruga\Dms\Library\Library;
@@ -46,12 +47,13 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
 //                'path' => __DIR__ . '/data/files',
 //            ],
         ];
-
+        
         $library = $this->getContainer()->build(LibraryInterface::class, $config);
         $this->assertInstanceOf(Library::class, $library);
         echo $library->getName();
         echo PHP_EOL;
     }
+    
     
     
     public function testCanCreateLibraryCustomizedDb(): void
@@ -78,6 +80,69 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
         echo PHP_EOL;
     }
     
+    
+    
+    /**
+     * @param array $config
+     *
+     * @return LibraryInterface
+     * @dataProvider libraryConfigProvider
+     * @throws ContainerExceptionInterface
+     */
+    public function testCanCreateLibrary(array $config): void
+    {
+        /** @var LibraryInterface $library */
+        $library = $this->getContainer()->build(LibraryInterface::class, $config);
+        $this->assertInstanceOf(Library::class, $library);
+        echo $library->getName();
+        echo PHP_EOL;
+//        $newName = uniqid($library->getName(), true);
+//        $library->setName($newName);
+        $library->save();
+        
+        
+        // Re-Load the library into $lib2
+        /** @var LibraryInterface $lib2 */
+        $lib2 = $this->getContainer()->build(LibraryInterface::class, $config);
+        $this->assertInstanceOf(Library::class, $library);
+        echo $lib2->getName();
+        echo PHP_EOL;
+//        $this->assertSame($newName, $lib2->getName());
+    }
+    
+    
+    
+    public function libraryConfigProvider(): array
+    {
+        return [
+            'MemoryDriver' => [
+                [
+                    'name' => 'MemoryDriver Library',
+                    Library::CONFIG_LIBRARYSTORAGE => [
+                        'driver' => \Ruga\Dms\Driver\Library\MemoryDriver::class,
+                    ],
+                ],
+            ],
+            'JsonFileDriver' => [
+                [
+                    'name' => 'JsonFileDriver Library',
+                    Library::CONFIG_LIBRARYSTORAGE => [
+                        'driver' => \Ruga\Dms\Driver\Library\JsonFileDriver::class,
+                        'filepath' => __DIR__ . '/../data/libraries/JsonFileDriver.json',
+                    ],
+                ],
+            ],
+            'DbDriver' => [
+                [
+                    'name' => 'DbDriver Library',
+                    Library::CONFIG_LIBRARYSTORAGE => [
+                        'driver' => \Ruga\Dms\Driver\Library\DbDriver::class,
+                    ],
+                ],
+            ],
+        
+        ];
+    }
     
 }
 

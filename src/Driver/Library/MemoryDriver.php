@@ -15,7 +15,15 @@ use Ruga\Dms\Driver\LibraryDriverInterface;
  */
 class MemoryDriver implements LibraryDriverInterface
 {
-    private string $name;
+    private string $name = '';
+    private string $remark = '';
+    
+    
+    
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
     
     
     
@@ -35,6 +43,26 @@ class MemoryDriver implements LibraryDriverInterface
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRemark(): string
+    {
+        return $this->remark;
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function setRemark(string $remark)
+    {
+        $this->remark = $remark;
     }
     
     

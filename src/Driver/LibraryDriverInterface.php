@@ -16,6 +16,7 @@ namespace Ruga\Dms\Driver;
 interface LibraryDriverInterface
 {
     const ATTR_NAME = 'name';
+    const ATTR_REMARK = 'remark';
     
     
     
@@ -34,6 +35,24 @@ interface LibraryDriverInterface
      * @return string
      */
     public function setName(string $name);
+    
+    
+    
+    /**
+     * Return the remark of the library.
+     *
+     * @return string
+     */
+    public function getRemark(): string;
+    
+    
+    
+    /**
+     * Set the remark of the library.
+     *
+     * @return string
+     */
+    public function setRemark(string $remark);
     
     
     

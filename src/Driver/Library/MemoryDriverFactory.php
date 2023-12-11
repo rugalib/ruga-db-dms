@@ -11,6 +11,7 @@ namespace Ruga\Dms\Driver\Library;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
+use Ramsey\Uuid\Uuid;
 
 class MemoryDriverFactory implements FactoryInterface
 {
@@ -20,6 +21,11 @@ class MemoryDriverFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        return new MemoryDriver();
+        $libraryName = $options['name'] ?? (Uuid::uuid5(
+            Uuid::NAMESPACE_OID,
+            hash('sha256', uniqid(date('U'), true))
+        ))->toString();
+        
+        return new MemoryDriver($libraryName);
     }
 }

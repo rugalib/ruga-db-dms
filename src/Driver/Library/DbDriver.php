@@ -8,11 +8,8 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Library;
 
-use Laminas\Db\RowGateway\AbstractRowGateway;
-use Laminas\Db\RowGateway\RowGateway;
-use Laminas\Db\Sql\Sql;
+use Laminas\Db\RowGateway\RowGatewayInterface;
 use Laminas\Json\Json;
-use Ruga\Db\Adapter\AdapterInterface;
 use Ruga\Dms\Driver\LibraryDriverInterface;
 
 /**
@@ -20,27 +17,12 @@ use Ruga\Dms\Driver\LibraryDriverInterface;
  */
 class DbDriver implements LibraryDriverInterface
 {
-    private AdapterInterface $adapter;
-    private AbstractRowGateway $row;
-    private string $name;
-    private array $data;
+    private RowGatewayInterface $row;
     
     
     
-    public function __construct(AdapterInterface $adapter, string $tableName='DmsLibrary')
+    public function __construct(RowGatewayInterface $row)
     {
-        $this->adapter = $adapter;
-        $this->name = 'name';
-        
-        $sql = new Sql($this->adapter);
-        $select = $sql->select()
-            ->from($tableName)
-            ->where(['name' => $this->name]);
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-        if (!$row = $result->current()) {
-            $row = new RowGateway('id', $tableName, $this->adapter);
-        }
         $this->row = $row;
     }
     
@@ -51,7 +33,7 @@ class DbDriver implements LibraryDriverInterface
      */
     public function getName(): string
     {
-        return $this->row->offsetGet('name');
+        return $this->row->offsetGet(self::ATTR_NAME);
     }
     
     
@@ -61,7 +43,28 @@ class DbDriver implements LibraryDriverInterface
      */
     public function setName(string $name)
     {
-        $this->row->offsetSet('name', $name);
+        $this->row->offsetSet(self::ATTR_NAME, $name);
+        $this->row->save();
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRemark(): string
+    {
+        return $this->row->offsetGet(self::ATTR_REMARK);
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function setRemark(string $name)
+    {
+        $this->row->offsetSet(self::ATTR_REMARK, $name);
         $this->row->save();
     }
     

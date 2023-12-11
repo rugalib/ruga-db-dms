@@ -24,6 +24,10 @@ class LibraryFactory implements FactoryInterface
         )[Dms::class] ?? [];
         
         $options = $options ?? $config;
+        if (!empty($options['name'] ?? null)) {
+            $options[Library::CONFIG_LIBRARYSTORAGE]['name'] = $options['name'];
+        }
+        
         
         if ($options[Library::CONFIG_LIBRARYSTORAGE]['driver'] ?? false) {
             /** @var LibraryDriverInterface $libraryDriver */
@@ -38,8 +42,8 @@ class LibraryFactory implements FactoryInterface
         
         
         $library = new Library($libraryDriver, $options);
-        
-        $library->setName($options['name']);
+
+//        $library->setName($options['name']);
         $library->save();
         
         
