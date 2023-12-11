@@ -40,7 +40,7 @@ class LibraryManager
      * @throws InvalidLibraryNameException If the library with the specified name does not exist in the configuration.
      *
      */
-    public function createLibraryFromName(string $name)
+    public function createLibraryFromName(string $name): LibraryInterface
     {
         if (!array_key_exists($name, $this->config)) {
             throw new InvalidLibraryNameException("Library with name '{$name}' does not exist in configuration");
