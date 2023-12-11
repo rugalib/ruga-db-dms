@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ruga\Dms\Document\DocumentInterface;
-use Ruga\Dms\Library\Exception\InvalidLibarayNameException;
+use Ruga\Dms\Library\Exception\InvalidLibraryNameException;
 use Ruga\Dms\Library\LibraryInterface;
 use Ruga\Dms\Library\LibraryManager;
 
@@ -62,8 +62,8 @@ class DmsMiddleware implements MiddlewareInterface
             $libraryName = $dmsRequest->getLibraryName();
             try {
                 $this->library = $this->libraryManager->createLibraryFromName($libraryName);
-            } catch (InvalidLibarayNameException $e) {
-                throw new InvalidLibarayNameException($e->getMessage(), StatusCodeInterface::STATUS_NOT_FOUND, $e);
+            } catch (InvalidLibraryNameException $e) {
+                throw new InvalidLibraryNameException($e->getMessage(), StatusCodeInterface::STATUS_NOT_FOUND, $e);
             }
             
             

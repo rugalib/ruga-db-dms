@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Library\Exception;
 
-class InvalidLibarayNameException extends \InvalidArgumentException
+class InvalidLibraryNameException extends \InvalidArgumentException
 {
     
 }

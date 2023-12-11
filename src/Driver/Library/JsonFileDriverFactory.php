@@ -24,6 +24,9 @@ class JsonFileDriverFactory implements FactoryInterface
     {
         $config = $container->get('config')[Dms::class][Library::CONFIG_LIBRARYSTORAGE] ?? [];
         $filepath = $options['filepath'] ?? $config['filepath'] ?? null;
+        if (empty($filepath)) {
+                throw new \InvalidArgumentException('filepath is required in configuration');
+            }
         return new JsonFileDriver($filepath);
     }
 }

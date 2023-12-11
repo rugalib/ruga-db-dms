@@ -9,12 +9,16 @@ declare(strict_types=1);
 namespace Ruga\Dms\Library;
 
 use Psr\Container\ContainerInterface;
-use Ruga\Dms\Library\Exception\InvalidLibarayNameException;
+use Ruga\Dms\Library\Exception\InvalidLibraryNameException;
 
 class LibraryManager
 {
     private ContainerInterface $container;
     private array $config;
+    
+    /**
+     * @var LibraryInterface[]
+     */
     private array $cache = [];
     
     
@@ -27,10 +31,19 @@ class LibraryManager
     
     
     
+    /**
+     * Creates a library object based on the provided name.
+     *
+     * @param string $name The name of the library to create.
+     *
+     * @return LibraryInterface The library object.
+     * @throws InvalidLibraryNameException If the library with the specified name does not exist in the configuration.
+     *
+     */
     public function createLibraryFromName(string $name)
     {
         if (!array_key_exists($name, $this->config)) {
-            throw new InvalidLibarayNameException("Library with name '{$name}' does not exist in configuration");
+            throw new InvalidLibraryNameException("Library with name '{$name}' does not exist in configuration");
         }
         
         $config = $this->config[$name];
@@ -42,6 +55,7 @@ class LibraryManager
             } else {
                 $this->cache[$name] = $this->container->build(LibraryInterface::class, $this->config[$name]);
             }
+            $this->cache[$name]->setName($name);
         }
         return $this->cache[$name];
     }
