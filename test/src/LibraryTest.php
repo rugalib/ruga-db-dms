@@ -85,9 +85,9 @@ class LibraryTest extends \Ruga\Dms\Test\PHPUnit\AbstractTestSetUp
     /**
      * @param array $config
      *
-     * @return LibraryInterface
-     * @dataProvider libraryConfigProvider
+     * @return void
      * @throws ContainerExceptionInterface
+     * @dataProvider libraryConfigProvider
      */
     public function testCanCreateLibrary(array $config): void
     {
