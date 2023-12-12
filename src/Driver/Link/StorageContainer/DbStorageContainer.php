@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Link\StorageContainer;
 
+use Laminas\Db\Sql\Where;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Ruga\Db\Table\AbstractTable;
@@ -22,12 +23,14 @@ use Ruga\Dms\Model\Link;
 class DbStorageContainer extends AbstractStorageContainer implements LinkStorageContainerInterface
 {
     private AbstractTable $table;
+    protected \SplObjectStorage $linksToRemove;
     
     
     
     public function __construct(LinkDriverInterface $linkDriver, UuidInterface $metaUuid, AbstractTable $table)
     {
         parent::__construct($linkDriver, $metaUuid);
+        $this->linksToRemove = new \SplObjectStorage();
         $this->table = $table;
     }
     
@@ -57,14 +60,19 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
         /** @var LinkObject $link */
         foreach ($this->links as $link) {
             if (!empty($link->foreignUuid) && ($link->foreignUuid === $keyUuid)) {
+                $this->linksToRemove->attach($this->links->offsetGet($link));
                 $this->links->offsetUnset($link);
-                break;
+                return;
             }
             if (empty($link->foreignUuid) && ($link->foreignkey === $key)) {
+                $this->linksToRemove->attach($this->links->offsetGet($link));
                 $this->links->offsetUnset($link);
-                break;
+                return;
             }
         }
+        // LinkObject not found in link list => create a new one
+        $o = new LinkObject($key, $keyUuid, $this->getDocument()->getUuid()->toString());
+        $this->linksToRemove->attach($o);
     }
     
     
@@ -86,6 +94,26 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
                 return true;
             }
         }
+        
+        
+        $link = new LinkObject($key, $keyUuid, $this->getDocument()->getUuid()->toString());
+        $select = $this->table->getSql()->select();
+        $select->where(function (Where $where) use ($link) {
+            $where
+                ->NEST
+                ->NEST->isNotNull('Foreign_uuid')->AND->equalTo('Foreign_uuid', $link->foreignUuid)->UNNEST
+                ->OR
+                ->NEST->isNull('Foreign_uuid')->AND->equalTo('Foreign_key', $link->foreignKey)->UNNEST
+                ->UNNEST;
+            $where->equalTo('Meta_uuid', $link->metaUuid);
+        });
+//            \Ruga\Log::addLog("SQL={$select->getSqlString($this->table->getAdapter()->getPlatform())}");
+        
+        /** @var Link $row */
+        if ($this->table->selectWith($select)->current()) {
+            return true;
+        }
+        
         return false;
     }
     
@@ -96,20 +124,53 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
      */
     public function save()
     {
+        // Save links
         /** @var LinkObject $link */
         foreach ($this->links as $link) {
+            $select = $this->table->getSql()->select();
+            $select->where(function (Where $where) use ($link) {
+                $where
+                    ->NEST
+                    ->NEST->isNotNull('Foreign_uuid')->AND->equalTo('Foreign_uuid', $link->foreignUuid)->UNNEST
+                    ->OR
+                    ->NEST->isNull('Foreign_uuid')->AND->equalTo('Foreign_key', $link->foreignKey)->UNNEST
+                    ->UNNEST;
+                $where->equalTo('Meta_uuid', $link->metaUuid);
+            });
+//            \Ruga\Log::addLog("SQL={$select->getSqlString($this->table->getAdapter()->getPlatform())}");
+            
             /** @var Link $row */
-            if (!$row = $this->table->select(['Foreign_uuid' => $link->foreignUuid, 'Meta_uuid' => $link->metaUuid]
-            )->current()) {
-                /** @var Link $row */
+            if (!$row = $this->table->selectWith($select)->current()) {
                 $row = $this->table->createRow();
-                $row->offsetSet('Foreign_uuid', $link->foreignUuid);
                 $row->offsetSet('Meta_uuid', $link->metaUuid);
             }
+            $row->offsetSet('Foreign_uuid', $link->foreignUuid);
             $row->offsetSet('Foreign_key', $link->foreignKey);
             $row->offsetSet('remark', $link->remark);
             $row->save();
         }
+        
+        // Remove links in linksToRemove
+        /** @var LinkObject $link */
+        foreach ($this->linksToRemove as $link) {
+            $select = $this->table->getSql()->select();
+            $select->where(function (Where $where) use ($link) {
+                $where
+                    ->NEST
+                    ->NEST->isNotNull('Foreign_uuid')->AND->equalTo('Foreign_uuid', $link->foreignUuid)->UNNEST
+                    ->OR
+                    ->NEST->isNull('Foreign_uuid')->AND->equalTo('Foreign_key', $link->foreignKey)->UNNEST
+                    ->UNNEST;
+                $where->equalTo('Meta_uuid', $link->metaUuid);
+            });
+//            \Ruga\Log::addLog("SQL={$select->getSqlString($this->table->getAdapter()->getPlatform())}");
+            
+            /** @var Link $row */
+            if ($row = $this->table->selectWith($select)->current()) {
+                $row->delete();
+            }
+        }
+        $this->linksToRemove->removeAllExcept(new \SplObjectStorage());
     }
     
     
@@ -129,6 +190,40 @@ class DbStorageContainer extends AbstractStorageContainer implements LinkStorage
     public function delete()
     {
         $this->links->removeAll($this->links);
+    }
+    
+    
+    
+    /**
+     * @inheritDoc
+     */
+    public function getLinks(): \ArrayIterator
+    {
+        $a = [];
+        
+        $metaUuid = $this->getDocument()->getUuid()->toString();
+        $select = $this->table->getSql()->select();
+        $select->where(function (Where $where) use ($metaUuid) {
+            $where->equalTo('Meta_uuid', $metaUuid);
+        });
+        
+        /** @var Link $row */
+        foreach ($this->table->selectWith($select) as $row) {
+            $o = new LinkObject($row->offsetGet('Foreign_key'), $row->offsetGet('Foreign_uuid'), $metaUuid);
+            $a[$o->foreignUuid] = $o;
+        }
+        
+        /** @var LinkObject $link */
+        foreach ($this->links as $link) {
+            $a[$link->foreignUuid] = $link;
+        }
+        
+        /** @var LinkObject $link */
+        foreach ($this->linksToRemove as $link) {
+            unset($a[$link->foreignUuid]);
+        }
+        
+        return new \ArrayIterator($a);
     }
     
     

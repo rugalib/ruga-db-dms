@@ -103,4 +103,19 @@ class MemoryStorageContainer extends AbstractStorageContainer implements LinkSto
     }
     
     
+    
+    /**
+     * @inheritDoc
+     */
+    public function getLinks(): \ArrayIterator
+    {
+        $a = [];
+        
+        /** @var LinkObject $link */
+        foreach ($this->links as $link) {
+            $a[$link->foreignUuid] = $link;
+        }
+        
+        return new \ArrayIterator($a);
+    }
 }

@@ -478,4 +478,14 @@ class Document extends AbstractDocument implements DocumentInterface
     }
     
     
+    
+    /**
+     * @inheritdoc
+     */
+    public function getLinks(): \ArrayIterator
+    {
+        return $this->linkStorage->getLinks();
+    }
+    
+    
 }

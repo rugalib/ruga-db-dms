@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Ruga\Dms\Driver\Link;
 
+use Ramsey\Uuid\Uuid;
+
 class LinkObject
 {
     public string $foreignKey;
@@ -27,6 +29,10 @@ class LinkObject
         }
         if ($metaUuid !== null) {
             $this->metaUuid = $metaUuid;
+        }
+        
+        if (empty($this->foreignUuid) && !empty($foreignKey)) {
+            $this->foreignUuid = (Uuid::uuid5(Uuid::NAMESPACE_OID, hash('sha256', $foreignKey)))->toString();
         }
     }
     

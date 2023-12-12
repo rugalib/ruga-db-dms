@@ -46,4 +46,12 @@ interface LinkStorageContainerDocumentInterface
     public function isLinkedTo($key): bool;
     
     
+    
+    /**
+     * Retrieve the links associated with the current object.
+     *
+     * @return \ArrayIterator The links associated with the current object.
+     */
+    public function getLinks(): \ArrayIterator;
+    
 }
