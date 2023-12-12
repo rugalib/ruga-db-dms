@@ -75,7 +75,7 @@ class DmsMiddleware implements MiddlewareInterface
                     return $this->processDownloadRequest($dmsRequest);
                 
                 case DmsRequestRoute::DELETE():
-//                    return $this->processDeleteRequest($dmsRequest);
+                    return $this->processDeleteRequest($dmsRequest);
             }
             
             
@@ -260,7 +260,7 @@ HTML;
         $doc->unlinkFrom($key);
         $doc->save();
         
-        // reload
+        // reload document
         /** @var DocumentInterface $doc */
         if (!$doc = $this->library->findDocumentsByUuid($doc->getUuid())->current()) {
             throw new \InvalidArgumentException(
@@ -273,10 +273,12 @@ HTML;
             return new Response\EmptyResponse(StatusCodeInterface::STATUS_FORBIDDEN);
         }
         
-        
         // delete document, if no links exist
+        if(count($doc->getLinks()) == 0) {
+            $doc->delete();
+        }
         
-        return new Response\EmptyResponse(501);
+        return new Response\EmptyResponse(StatusCodeInterface::STATUS_RESET_CONTENT);
     }
     
     
